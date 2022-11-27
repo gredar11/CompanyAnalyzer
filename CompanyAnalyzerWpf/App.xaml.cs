@@ -17,12 +17,13 @@ namespace CompanyAnalyzerWpf
     {
         protected override Window CreateShell()
         {
-            throw new NotImplementedException();
+            var w = Container.Resolve<MainWindow>();
+            return w;
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            throw new NotImplementedException();
+            // add dependencies
         }
     }
 }
