@@ -12,12 +12,11 @@ namespace Domain.Models
     {
         public Guid DepartmentId { get; set; }
         public string DepartmentName { get; set; }
-        [Required]
         [ForeignKey("Head")]
-        public Guid HeadEmployeeId { get; set; }
-        public Employee Head { get; set; }
-        public Guid CompanyId { get; set; }
-        public Company Company { get; set; }
+        public Guid? HeadEmployeeId { get; set; }
+        public Employee? Head { get; set; }
+        public Guid? CompanyId { get; set; }
+        public Company? Company { get; set; }
         public IEnumerable<Employee> Employees { get; set; }
     }
 }
