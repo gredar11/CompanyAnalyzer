@@ -27,9 +27,6 @@ namespace CompanyAnalyzerWpf
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // add dependencies
-            var builder = new DbContextOptionsBuilder<CompanyEmployeesDbContext>();
-            builder.UseSqlite("Filename=CompanyAnalitics.db", b => b.MigrationsAssembly("CompanyAnalyzerWpf"));
-            containerRegistry.RegisterInstance(builder.Options);
             containerRegistry.Register<CompanyEmployeesDbContext>();
         }
     }
