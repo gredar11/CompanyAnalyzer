@@ -12,6 +12,6 @@ namespace Domain.Models
         public string CompanyName { get; set; }
         public DateTime EstablishmentDate { get; set; }
         public string Adress { get; set; }
-        public ICollection<Department> Departments { get; set; }
+        public IEnumerable<Department> Departments { get; set; }
     }
 }
