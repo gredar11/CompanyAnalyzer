@@ -13,8 +13,8 @@ namespace Domain.Models
         public string SecondName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime EmploymentDate { get; set; }
-        public Guid DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public Guid? DepartmentId { get; set; }
+        public Department? Department { get; set; }
         public string Post { get; set; }
         public double Salary { get; set; }
     }
