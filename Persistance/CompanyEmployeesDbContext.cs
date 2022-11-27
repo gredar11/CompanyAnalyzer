@@ -1,25 +1,29 @@
 ﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Persistance.EntityConfigurations;
 
 namespace Persistance
 {
-    public class CompanyEmployeesDbContext:DbContext
+    public class CompanyEmployeesDbContext : DbContext
     {
         public DbSet<Company> Companies { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
-        public CompanyEmployeesDbContext(DbContextOptions<CompanyEmployeesDbContext> options):base(options)
+        
+        public CompanyEmployeesDbContext(DbContextOptions<CompanyEmployeesDbContext> options) : base(options)
         {
-
+            //Database.EnsureCreated();
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
+            modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyConfiguration());
             // configurations
         }
     }

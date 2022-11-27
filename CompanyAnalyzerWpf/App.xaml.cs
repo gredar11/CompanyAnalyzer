@@ -1,4 +1,7 @@
-﻿using Prism.Ioc;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Persistance;
+using Prism.Ioc;
 using Prism.Unity;
 using System;
 using System.Collections.Generic;
@@ -24,6 +27,10 @@ namespace CompanyAnalyzerWpf
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // add dependencies
+            var builder = new DbContextOptionsBuilder<CompanyEmployeesDbContext>();
+            builder.UseSqlite("Filename=CompanyAnalitics.db", b => b.MigrationsAssembly("CompanyAnalyzerWpf"));
+            containerRegistry.RegisterInstance(builder.Options);
+            containerRegistry.Register<CompanyEmployeesDbContext>();
         }
     }
 }

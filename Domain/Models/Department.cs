@@ -10,7 +10,10 @@ namespace Domain.Models
     {
         public Guid DepartmentId { get; set; }
         public string DepartmentName { get; set; }
+        public Guid HeadId { get; set; }
         public Employee Head { get; set; }
-        public ICollection<Employee> Employees { get; set; }
+        public Guid CompanyId { get; set; }
+        public Company Company { get; set; }
+        public IEnumerable<Employee> Employees { get; set; }
     }
 }
