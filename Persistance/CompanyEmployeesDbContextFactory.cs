@@ -13,7 +13,8 @@ namespace Persistance
         public CompanyEmployeesDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<CompanyEmployeesDbContext>();
-            optionsBuilder.UseSqlite("Data Source=CompanyAnalitics.db");
+            //optionsBuilder.UseSqlite("Data Source=CompanyAnalitics.db");
+            optionsBuilder.UseSqlite("Data Source=E:\\repos\\CompanyAnalyzer\\Persistance\\CompanyAnalitics.db");
             return new CompanyEmployeesDbContext(optionsBuilder.Options);
         }
     }

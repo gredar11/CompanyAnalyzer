@@ -10,7 +10,7 @@ namespace Persistance
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
         
-        public CompanyEmployeesDbContext(DbContextOptions<CompanyEmployeesDbContext> options) : base(options)
+        public CompanyEmployeesDbContext(DbContextOptions options) : base(options)
         {
             //Database.EnsureCreated();
         }
