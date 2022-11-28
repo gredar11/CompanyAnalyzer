@@ -32,6 +32,7 @@ namespace CompanyAnalyzerWpf
             containerRegistry.RegisterInstance(typeof(CompanyEmployeesDbContext), dbContextFactory.CreateDbContext(new string[] {}));
             
             containerRegistry.Register<ICompanyRepository, CompanyRepository>();
+            containerRegistry.Register<IDepartmentRepository, DepartmentRepository>();
         }
     }
 }

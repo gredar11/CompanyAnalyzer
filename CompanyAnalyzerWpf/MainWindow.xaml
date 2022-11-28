@@ -3,8 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:inter="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:local="clr-namespace:CompanyAnalyzerWpf"
+        xmlns:vms="clr-namespace:CompanyAnalyzerWpf.ViewModels"
+        xmlns:domain="clr-namespace:Domain.Models;assembly=Domain"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="MainWindow" Height="450" Width="800">
@@ -14,8 +17,28 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Button Width="100" Command="{Binding LoadCompaniesCommand}">Load entities</Button>
-        <TreeView Grid.Row="1">
-            
+        <TreeView Grid.Row="1" x:Name="MainTreeView" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch" ItemsSource="{Binding Companies}" >
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Departments}" DataType="{x:Type vms:CompanyViewModel}">
+                    <Label Content="{Binding Company.CompanyName}">
+                        <inter:Interaction.Triggers>
+                            <inter:EventTrigger EventName="MouseDoubleClick">
+                                <inter:InvokeCommandAction Command="{Binding LoadDepartmentsCommand}"></inter:InvokeCommandAction>
+                            </inter:EventTrigger>
+                        </inter:Interaction.Triggers>
+                    </Label>
+                    <HierarchicalDataTemplate.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Employees}" DataType="{x:Type domain:Department}">
+                            <Label Content="{Binding DepartmentName}"/>
+                            <HierarchicalDataTemplate.ItemTemplate>
+                                <DataTemplate DataType="{x:Type domain:Employee}">
+                                    <Label Content="{Binding FirstName}"/>
+                                </DataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
         </TreeView>
     </Grid>
 </Window>
