@@ -10,5 +10,9 @@ namespace Contracts.cs.RepositoryContracts
     public interface IDepartmentRepository
     {
         Task<IEnumerable<Department>> GetDepartments(Guid companyId, bool trackChanges);
+        Task<Department> GetDepartmentById(Guid companyId, Guid departmentId, bool trackChanges);
+        Task DeleteDepartment(Guid companyId, Guid departmentId);
+        void UpdateDepartment(Department department);
+        void CreateDepartment(Department department);
     }
 }
