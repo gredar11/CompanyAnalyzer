@@ -27,7 +27,12 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<Employee>> GetAllEmployeesByCompany(Guid companyId, Guid departmentId, bool trackChanges)
         {
-            var res = await FindAll(trackChanges).ToListAsync();
+            var company = await RepositoryContext.Set<Company>().Where(x => x.CompanyId == companyId).Include(x => x.Departments).FirstOrDefaultAsync();
+            if (company == null)
+                throw new Exception();
+            if (!company.Departments.Any(x => x.DepartmentId == departmentId))
+                throw new Exception();
+            var res = await FindByCondition(x=> x.DepartmentId == departmentId, trackChanges).ToListAsync();
             return res;
         }
 

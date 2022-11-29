@@ -1,7 +1,10 @@
-﻿using Contracts.cs.RepositoryContracts;
+﻿using CompanyAnalyzerWpf.Tools;
+using Contracts.cs.RepositoryContracts;
 using Domain.Models;
+using Persistance;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,28 +16,43 @@ namespace CompanyAnalyzerWpf.ViewModels
 {
     public class MainWindowViewModel:BindableBase
     {
-        private readonly ICompanyRepository _companyRepository;
-        private readonly IDepartmentRepository _departmentRepository;
-        public MainWindowViewModel(ICompanyRepository companyRepository, IDepartmentRepository departmentRepository)
+        private readonly RepositoryManager _repositoryManager;
+        private readonly IDialogService _dialogService;
+        public MainWindowViewModel(RepositoryManager repositoryManager, IDialogService dialogService)
         {
-            _companyRepository = companyRepository;
-            _departmentRepository = departmentRepository;
+            _repositoryManager = repositoryManager;
+            _dialogService = dialogService;
         }
-
+        private object _selectedItem;
+        public object SelectedItem
+        {
+            get { return _selectedItem; }
+            set { SetProperty(ref _selectedItem, value); }
+        }
         private DelegateCommand _loadCompanies;
         public DelegateCommand LoadCompaniesCommand =>
             _loadCompanies ?? (_loadCompanies = new DelegateCommand(ExecuteLoadCompaniesCommand));
-
-        
         void ExecuteLoadCompaniesCommand()
         {
-            var companies = _companyRepository.GetAll(false).Result;
+            var companies = _repositoryManager.CompanyRepository.GetAll(false).Result;
             foreach (var company in companies)
             {
-                Companies.Add(new CompanyViewModel(_departmentRepository) { Company = company});
+                Companies.Add(new CompanyViewModel(_repositoryManager) { Company = company});
             }
             Console.WriteLine();
         }
         public ObservableCollection<CompanyViewModel> Companies { get; set; } = new ObservableCollection<CompanyViewModel>();
+
+        private DelegateCommand<object> _showDialogCommand;
+        public DelegateCommand<object> ShowDialogCommand =>
+            _showDialogCommand ?? (_showDialogCommand = new DelegateCommand<object>(ExecuteShowDialogCommand));
+
+        void ExecuteShowDialogCommand(object selectedItem)
+        {
+            _dialogService.ShowDialog("EditCompanyDialog", new DialogParametersWithObj(SelectedItem), r =>
+            {
+                
+            });
+        }
     }
 }

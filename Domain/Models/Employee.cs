@@ -11,8 +11,8 @@ namespace Domain.Models
         public Guid EmployeeId { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public DateTime EmploymentDate { get; set; }
+        public DateOnly DateOfBirth { get; set; }
+        public DateOnly EmploymentDate { get; set; }
         public Guid? DepartmentId { get; set; }
         public Department? Department { get; set; }
         public string Post { get; set; }

@@ -36,7 +36,7 @@ namespace Persistance.Migrations
 
                     b.HasKey("CompanyId");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Department", b =>
@@ -61,7 +61,7 @@ namespace Persistance.Migrations
 
                     b.HasIndex("HeadEmployeeId");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Employee", b =>
@@ -98,7 +98,7 @@ namespace Persistance.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Department", b =>

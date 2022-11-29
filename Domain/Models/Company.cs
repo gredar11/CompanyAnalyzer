@@ -10,7 +10,7 @@ namespace Domain.Models
     {
         public Guid CompanyId { get; set; }
         public string CompanyName { get; set; }
-        public DateTime EstablishmentDate { get; set; }
+        public DateOnly EstablishmentDate { get; set; }
         public string Adress { get; set; }
         public IEnumerable<Department> Departments { get; set; }
     }

@@ -1,4 +1,5 @@
 ﻿using CompanyAnalyzerWpf.ViewModels;
+using CompanyAnalyzerWpf.Views;
 using Contracts.cs.RepositoryContracts;
 using Persistance;
 using Persistance.Repositories;
@@ -29,10 +30,9 @@ namespace CompanyAnalyzerWpf
             // add dependencies
             //var b = containerRegistry.Register<CompanyEmployeesDbContext>();
             var dbContextFactory = new CompanyEmployeesDbContextFactory();
-            containerRegistry.RegisterInstance(typeof(CompanyEmployeesDbContext), dbContextFactory.CreateDbContext(new string[] {}));
-            
-            containerRegistry.Register<ICompanyRepository, CompanyRepository>();
-            containerRegistry.Register<IDepartmentRepository, DepartmentRepository>();
+            var dbContext = dbContextFactory.CreateDbContext(new string[] { });
+            containerRegistry.RegisterDialog<EditCompanyDialog, EditCompanyDialogViewModel>();
+            containerRegistry.RegisterInstance(typeof(RepositoryManager), new RepositoryManager(dbContext));
         }
     }
 }
