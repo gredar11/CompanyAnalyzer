@@ -3,12 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
-             Width="300" Height="400">
+             MinWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="10"></Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"></Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-            <TextBlock Text="{Binding CompanyViewModel.CompanyName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBlock>
-            <DatePickerTextBox Text="{Binding CompanyViewModel.EstablishmentDate, StringFormat='dd/MM/yyyy', Mode=OneTime}"></DatePickerTextBox>
-            <TextBlock Text="{Binding CompanyViewModel.Adress, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"></TextBlock>
+            <TextBox Text="{Binding CompanyViewModel.CompanyName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
+            <DatePicker Text="{Binding CompanyViewModel.EstablishmentDate, StringFormat='yyyy-MM-dd'}"></DatePicker>
+            <TextBox Text="{Binding CompanyViewModel.Adress, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"></TextBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0">Ok</Button>
+                <Button Grid.Column="1">Cancel</Button>
+            </Grid>
         </StackPanel>
+        
     </Grid>
 </UserControl>
