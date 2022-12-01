@@ -16,7 +16,14 @@
                 </TextBox.Text>
             </TextBox>
             <TextBox Text="{Binding DepartmentName}"></TextBox>
-            <ComboBox ItemsSource="{Binding EmployeesOfDepartment}" SelectedItem="{Binding Head}">
+            <ComboBox ItemsSource="{Binding Companies}" SelectedItem="{Binding Company, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding CompanyName}"></TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox ItemsSource="{Binding EmployeesOfDepartment}" SelectedItem="{Binding Head, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>

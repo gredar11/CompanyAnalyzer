@@ -26,16 +26,19 @@ namespace CompanyAnalyzerWpf.ViewModels
             get { return _departmentName; }
             set { SetProperty(ref _departmentName, value); }
         }
-        private Guid _headId;
-        public Guid HeadId
+        private Company _company;
+        public Company Company
         {
-            get { return _headId; }
-            set { SetProperty(ref _headId, value); }
+            get { return _company; }
+            set { SetProperty(ref _company, value);
+                EmployeesOfDepartment.Clear();
+                EmployeesOfDepartment.AddRange(_repositoryManager.EmployeeRepository.GetAllEmployeesByCompany(Company.CompanyId, Department.DepartmentId, false).Result);
+            }
         }
-        private Employee _head;
-
+        public ObservableCollection<Company> Companies { get; set; } = new ObservableCollection<Company>();
         public event Action<IDialogResult> RequestClose;
 
+        private Employee _head;
         public Employee Head
         {
             get { return _head; }
@@ -44,7 +47,31 @@ namespace CompanyAnalyzerWpf.ViewModels
         public ObservableCollection<Employee> EmployeesOfDepartment { get; set; } = new ObservableCollection<Employee>();
 
         public string Title => $"Editing department {Department.DepartmentName}";
+        protected virtual void CloseDialog(string parameter)
+        {
+            ButtonResult result = ButtonResult.None;
 
+            if (parameter?.ToLower() == "true")
+            {
+                viewModel.Department.Head = Head;
+                viewModel.Department.HeadEmployeeId = Head.EmployeeId;
+                viewModel.Department.DepartmentName = DepartmentName;
+                viewModel.Department.Company = Company;
+                viewModel.Department.CompanyId = Company.CompanyId;
+                _repositoryManager.DepartmentRepository.UpdateDepartment(viewModel.Department);
+                _repositoryManager.SaveAsync();
+                result = ButtonResult.OK;
+            }
+            else if (parameter?.ToLower() == "false")
+                result = ButtonResult.Cancel;
+
+            RaiseRequestClose(new DialogResult(result));
+        }
+
+        public virtual void RaiseRequestClose(IDialogResult dialogResult)
+        {
+            RequestClose?.Invoke(dialogResult);
+        }
         public bool CanCloseDialog()
         {
             return true;
@@ -62,6 +89,7 @@ namespace CompanyAnalyzerWpf.ViewModels
             Department= viewModel.Department;
             Head = Department.Head;
             DepartmentName = Department.DepartmentName;
+            Companies.AddRange(_repositoryManager.CompanyRepository.GetAll(false).Result);
             EmployeesOfDepartment.AddRange(_repositoryManager.EmployeeRepository.GetAllEmployeesByCompany(Department.CompanyId.Value, Department.DepartmentId, false).Result);
         }
     }

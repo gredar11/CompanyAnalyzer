@@ -17,6 +17,7 @@
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
             <TextBox Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
+            
             <DatePicker Text="{Binding EstablishmentDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
             <TextBox Text="{Binding Adress, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
             <Grid>
