@@ -1,6 +1,8 @@
-﻿using CompanyAnalyzerWpf.ViewModels;
+﻿using AutoMapper;
+using CompanyAnalyzerWpf.ViewModels;
 using CompanyAnalyzerWpf.Views;
 using Contracts.cs.RepositoryContracts;
+using Domain.Models;
 using Persistance;
 using Persistance.Repositories;
 using Prism.Ioc;
@@ -29,10 +31,22 @@ namespace CompanyAnalyzerWpf
         {
             // add dependencies
             //var b = containerRegistry.Register<CompanyEmployeesDbContext>();
+            //var configuration = new MapperConfiguration(cfg =>
+            //{
+            //    cfg.CreateMap<Employee, Employee>();
+            //    cfg.CreateMap<Department, Department>();
+            //    cfg.CreateMap<Company,Company>();
+
+            //});
+            //containerRegistry.RegisterInstance(typeof(IMapper), new Mapper(configuration));
             var dbContextFactory = new CompanyEmployeesDbContextFactory();
             var dbContext = dbContextFactory.CreateDbContext(new string[] { });
-            containerRegistry.RegisterDialog<EditCompanyDialog, EditCompanyDialogViewModel>();
             containerRegistry.RegisterInstance(typeof(RepositoryManager), new RepositoryManager(dbContext));
+            containerRegistry.RegisterDialog<EditCompanyDialog, EditCompanyDialogViewModel>();
+            containerRegistry.RegisterDialog<SalaryReportView, SalaryReportViewModel>();
+            containerRegistry.RegisterDialog<EditDepartmentDialog, EditDepartmentDialogViewModel>();
+            containerRegistry.RegisterDialog<EditEmployeeDialog, EditEmployeeDialogViewModel>();
+            containerRegistry.RegisterDialog<DeleteEntityDialog, DeleteEntityDialogViewModel>();
         }
     }
 }

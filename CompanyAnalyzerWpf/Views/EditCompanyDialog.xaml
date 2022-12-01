@@ -1,7 +1,8 @@
 ﻿<UserControl x:Class="CompanyAnalyzerWpf.Views.EditCompanyDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:prism="http://prismlibrary.com/"             
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:tools="clr-namespace:CompanyAnalyzerWpf.Tools"
              prism:ViewModelLocator.AutoWireViewModel="True"
              MinWidth="300">
     <UserControl.Resources>
@@ -11,19 +12,20 @@
         <Style TargetType="Button">
             <Setter Property="Margin" Value="5"></Setter>
         </Style>
+        <tools:DateConverter x:Key="DateConverter"></tools:DateConverter>
     </UserControl.Resources>
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-            <TextBox Text="{Binding CompanyViewModel.CompanyName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
-            <DatePicker Text="{Binding CompanyViewModel.EstablishmentDate, StringFormat='yyyy-MM-dd'}"></DatePicker>
-            <TextBox Text="{Binding CompanyViewModel.Adress, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"></TextBox>
+            <TextBox Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
+            <DatePicker Text="{Binding EstablishmentDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
+            <TextBox Text="{Binding Adress, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0">Ok</Button>
-                <Button Grid.Column="1">Cancel</Button>
+                <Button Grid.Column="0" Command="{Binding CloseDialogCommand}" CommandParameter="true">Ok</Button>
+                <Button Grid.Column="1" Command="{Binding CloseDialogCommand}" CommandParameter="false">Cancel</Button>
             </Grid>
         </StackPanel>
         

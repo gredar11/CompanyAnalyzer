@@ -1,4 +1,5 @@
-﻿using Contracts.cs.RepositoryContracts;
+﻿using CompanyAnalyzerWpf.Commands;
+using Contracts.cs.RepositoryContracts;
 using Domain.Models;
 using Persistance;
 using Prism.Commands;
@@ -20,69 +21,29 @@ namespace CompanyAnalyzerWpf.ViewModels
         public CompanyViewModel(RepositoryManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
+            LoadDepartmentsCommand = new AsyncCommand(ExecuteLoadDepartmentsCommand, () => true);
         }
         public ObservableCollection<DepartmentViewModel> Departments { get; set; } = new ObservableCollection<DepartmentViewModel>();
-        private Company _company;
-        public Company Company
-        {
-            get { return _company; }
-            set
-            {
-                SetProperty(ref _company, value);
-                CompanyName = value.CompanyName;
-                EstablishmentDate = value.EstablishmentDate;
-                Adress = value.Adress;
-            }
-        }
+        #region Properties
+        public Company Company { get; set; }
+
         private string _companyName;
         public string CompanyName
         {
             get { return _companyName; }
-            set
-            {
-                SetProperty(ref _companyName, value);
-                RaisePropertyChanged(nameof(Company));
-            }
+            set { SetProperty(ref _companyName, value); }
         }
-        private DateOnly _establishmentDate;
-        public DateOnly EstablishmentDate
-        {
-            get { return _establishmentDate; }
-            set
-            {
-                SetProperty(ref _establishmentDate, value);
-                RaisePropertyChanged(nameof(Company));
-            }
-        }
-        private string _adress;
-        public string Adress
-        {
-            get { return _adress; }
-            set
-            {
-                SetProperty(ref _adress, value);
-                RaisePropertyChanged(nameof(Company));
-            }
-        }
-        private DelegateCommand _loadDepartments;
-        public DelegateCommand LoadDepartmentsCommand =>
-            _loadDepartments ?? (_loadDepartments = new DelegateCommand(ExecuteLoadDepartmentsCommand));
+        #endregion
+        public IAsyncCommand LoadDepartmentsCommand { get; private set; }
 
-        void ExecuteLoadDepartmentsCommand()
+        async Task ExecuteLoadDepartmentsCommand()
         {
-            var departments = _repositoryManager.DepartmentRepository.GetDepartments(Company.CompanyId, false).Result;
+            var departments = await _repositoryManager.DepartmentRepository.GetDepartments(Company.CompanyId, false);
+            Departments.Clear();
             foreach (var item in departments)
             {
                 Departments.Add(new DepartmentViewModel(_repositoryManager) { Department = item });
             }
-        }
-        private DelegateCommand _updateCompany;
-        public DelegateCommand UpdateCompanyCommand =>
-            _updateCompany ?? (_updateCompany = new DelegateCommand(ExecuteUpdateCompanyCommand));
-
-        void ExecuteUpdateCompanyCommand()
-        {
-            RaisePropertyChanged(nameof(Company));
         }
     }
 }

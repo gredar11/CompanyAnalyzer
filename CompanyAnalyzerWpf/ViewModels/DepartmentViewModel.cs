@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using CompanyAnalyzerWpf.Commands;
+using Domain.Models;
 using Persistance;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -11,28 +12,26 @@ using System.Threading.Tasks;
 
 namespace CompanyAnalyzerWpf.ViewModels
 {
-    public class DepartmentViewModel:BindableBase
+    public class DepartmentViewModel : BindableBase
     {
         private readonly RepositoryManager _repositoryManager;
         public DepartmentViewModel(RepositoryManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
+            LoadEmployeesCommand = new AsyncCommand(ExecuteLoadEmployeesCommand, () => true);
         }
-        private Department _department;
-        public Department Department
-        {
-            get { return _department; }
-            set { SetProperty(ref _department, value); }
-        }
-        public ObservableCollection<Employee> Employees { get; set; } = new ObservableCollection<Employee>();
-        private DelegateCommand _loadEmployees;
-        public DelegateCommand LoadEmployeesCommand =>
-            _loadEmployees ?? (_loadEmployees = new DelegateCommand(ExecuteLoadEmployeesCommand));
+        public Department Department { get; set; }
+        public ObservableCollection<EmployeeViewModel> Employees { get; set; } = new ObservableCollection<EmployeeViewModel>();
+        public IAsyncCommand LoadEmployeesCommand { get; private set; }
 
-        void ExecuteLoadEmployeesCommand()
+        async Task ExecuteLoadEmployeesCommand()
         {
-            var employees = _repositoryManager.EmployeeRepository.GetAllEmployeesByCompany(Department.CompanyId.Value, Department.DepartmentId, true).Result;
-            Employees.AddRange(employees);
+            Employees.Clear();
+            var employees = await _repositoryManager.EmployeeRepository.GetAllEmployeesByCompany(Department.CompanyId.Value, Department.DepartmentId, true);
+            foreach (var item in employees)
+            {
+                Employees.Add(new EmployeeViewModel() { Employee = item });
+            }
         }
     }
 }

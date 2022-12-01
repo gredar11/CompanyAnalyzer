@@ -34,7 +34,7 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<Department>> GetDepartments(Guid companyId, bool trackChanges)
         {
-            var departments = await FindByCondition(x => x.CompanyId == companyId, trackChanges).ToListAsync();
+            var departments = await FindByCondition(x => x.CompanyId == companyId, trackChanges).Include(x => x.Head).Include(x => x.Company).ToListAsync();
             return departments;
         }
 
