@@ -6,22 +6,35 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              MinWidth="300">
     <UserControl.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="10"></Setter>
+        <Style TargetType="TextBox" BasedOn="{StaticResource StandartTextBox}">
         </Style>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="5"></Setter>
+        <Style TargetType="Button" BasedOn="{StaticResource StandartButton}">
+        </Style>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource StandartCombobox}">
         </Style>
         <tools:DateConverter x:Key="DateConverter"></tools:DateConverter>
     </UserControl.Resources>
     <Grid>
         <StackPanel>
+            <Label>First name:</Label>
             <TextBox Text="{Binding FirstName}"></TextBox>
+
+            <Label>Second name:</Label>
             <TextBox Text="{Binding SecondName}"></TextBox>
+
+            <Label>Birthday:</Label>
             <DatePicker Text="{Binding DateOfBirth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
+
+            <Label>Employment Date:</Label>
             <DatePicker Text="{Binding EmploymentDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
+
+            <Label>Post:</Label>
             <TextBox Text="{Binding Post}"></TextBox>
+
+            <Label>Salary:</Label>
             <TextBox Text="{Binding Salary}"></TextBox>
+
+            <Label>Company:</Label>
             <ComboBox ItemsSource="{Binding Companies}" SelectedItem="{Binding Company}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -29,6 +42,7 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            <Label>Department:</Label>
             <ComboBox ItemsSource="{Binding Departments}" SelectedItem="{Binding EmpDepartment}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -36,6 +50,14 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Command="{Binding CloseDialogCommand}" CommandParameter="true">Ok</Button>
+                <Button Grid.Column="1" Command="{Binding CloseDialogCommand}" CommandParameter="false">Cancel</Button>
+            </Grid>
         </StackPanel>
     </Grid>
 </UserControl>

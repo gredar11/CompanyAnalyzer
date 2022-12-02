@@ -6,13 +6,27 @@
              xmlns:local="clr-namespace:CompanyAnalyzerWpf.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource StandartTextBlock}"></Style>
+    </UserControl.Resources>
     <Grid>
         <StackPanel>
+            <TextBlock Text="FirstName:" FontWeight="Bold"></TextBlock>
             <TextBlock Text="{Binding Employee.FirstName}"></TextBlock>
+
+            <TextBlock Text="SecondName:" FontWeight="Bold"></TextBlock>
             <TextBlock Text="{Binding Employee.SecondName}"></TextBlock>
+
+            <TextBlock Text="DateOfBirth:" FontWeight="Bold"></TextBlock>
             <TextBlock Text="{Binding Employee.DateOfBirth}"></TextBlock>
+
+            <TextBlock Text="EmploymentDate:" FontWeight="Bold"></TextBlock>
             <TextBlock Text="{Binding Employee.EmploymentDate}"></TextBlock>
+
+            <TextBlock Text="Post:" FontWeight="Bold"></TextBlock>
             <TextBlock Text="{Binding Employee.Post}"></TextBlock>
+
+            <TextBlock Text="Salary:" FontWeight="Bold"></TextBlock>
             <TextBlock Text="{Binding Employee.Salary}"></TextBlock>
         </StackPanel>
     </Grid>

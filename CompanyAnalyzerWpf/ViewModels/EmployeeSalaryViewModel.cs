@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Persistance.Dtos;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace CompanyAnalyzerWpf.ViewModels
 {
     public class EmployeeSalaryViewModel:BindableBase
     {
-        public EmployeeSalaryViewModel(Employee employee, string companyName, string departmentName)
+        public EmployeeSalaryViewModel(EmployeeDto employee, string companyName, string departmentName)
         {
             Salary = employee.Salary;
             FullName = employee.FirstName + " " + employee.SecondName;

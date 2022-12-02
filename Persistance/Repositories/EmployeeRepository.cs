@@ -3,6 +3,7 @@ using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,33 +18,41 @@ namespace Persistance.Repositories
 
         public void CreateEmployee(Employee employee)
         {
-            Create(employee);
+            RepositoryContext.Set<Employee>().Add(employee);
         }
-        public async Task DeleteEmployee(Guid companyId, Guid departmentId, Guid employeeId)
+        public async Task DeleteEmployee(Guid id)
         {
-            var employeeToDelete = await GetEmployeeById(companyId, departmentId, employeeId, trackChanges: true);
-            Delete(employeeToDelete);
+            var entity = RepositoryContext.Set<Employee>().Find(id);
+            Delete(entity);
         }
 
         public async Task<IEnumerable<Employee>> GetAllEmployeesByCompany(Guid companyId, Guid departmentId, bool trackChanges)
         {
-            var company = await RepositoryContext.Set<Company>().Where(x => x.CompanyId == companyId).Include(x => x.Departments).AsNoTracking().FirstOrDefaultAsync();
+            var company = await RepositoryContext.Set<Company>().Where(x => x.CompanyId == companyId).AsNoTracking().FirstOrDefaultAsync();
             if (company == null)
-                throw new Exception();
-            if (!company.Departments.Any(x => x.DepartmentId == departmentId))
-                throw new Exception();
-            var res = await FindByCondition(x => x.DepartmentId == departmentId, trackChanges).Include(x => x.Department).ThenInclude(x => x.Company).AsNoTracking().ToListAsync();
+                return null;
+            var departments = RepositoryContext.Set<Department>().Where(x => x.CompanyId == companyId).AsNoTracking().ToList();
+            if (!departments.Any(x => x.DepartmentId == departmentId))
+                return null;
+            var res = await FindByCondition(x => x.DepartmentId == departmentId, trackChanges).AsNoTracking().ToListAsync();
             return res;
         }
 
         public async Task<Employee> GetEmployeeById(Guid companyId, Guid departmentId, Guid employeeId, bool trackChanges)
         {
-            var company = await RepositoryContext.Set<Company>().Where(x => x.CompanyId == companyId).Include(x => x.Departments).FirstOrDefaultAsync();
+            var company = await RepositoryContext.Set<Company>().Where(x => x.CompanyId == companyId).Include(x => x.Departments).AsNoTracking().FirstOrDefaultAsync();
             if (company == null)
-                throw new Exception();
+                return null;
             if (!company.Departments.Any(x => x.DepartmentId == departmentId))
-                throw new Exception();
+                return null;
             var res = await FindByCondition(x => x.DepartmentId == departmentId && x.EmployeeId == employeeId, trackChanges).SingleOrDefaultAsync();
+            return res;
+        }
+
+        public async Task<Employee> GetEmployeeById(Guid employeeId, bool trackChanges)
+        {
+            
+            var res = await FindByCondition(x => x.EmployeeId == employeeId, trackChanges).SingleOrDefaultAsync();
             return res;
         }
 

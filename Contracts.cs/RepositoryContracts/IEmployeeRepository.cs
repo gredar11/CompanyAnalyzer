@@ -9,8 +9,9 @@ namespace Contracts.cs.RepositoryContracts
 {
     public interface IEmployeeRepository
     {
-        Task DeleteEmployee(Guid companyId, Guid departmentId, Guid employeeId);
+        Task DeleteEmployee(Guid id);
         Task<Employee> GetEmployeeById(Guid companyId, Guid departmentId, Guid employeeId, bool trackChanges);
+        Task<Employee> GetEmployeeById(Guid employeeId, bool trackChanges);
         Task<IEnumerable<Employee>> GetAllEmployeesByCompany(Guid companyId, Guid departmentId, bool trackChanges);
         void UpdateEmployee(Employee employee);
         void CreateEmployee(Employee employee);

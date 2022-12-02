@@ -2,6 +2,7 @@
 using Contracts.cs.RepositoryContracts;
 using Domain.Models;
 using Persistance;
+using Persistance.Dtos;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -16,16 +17,16 @@ namespace CompanyAnalyzerWpf.ViewModels
 {
     public class CompanyViewModel : BindableBase
     {
-        private readonly RepositoryManager _repositoryManager;
+        private readonly PersistanceServiceManager _repositoryManager;
 
-        public CompanyViewModel(RepositoryManager repositoryManager)
+        public CompanyViewModel(PersistanceServiceManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
             LoadDepartmentsCommand = new AsyncCommand(ExecuteLoadDepartmentsCommand, () => true);
         }
         public ObservableCollection<DepartmentViewModel> Departments { get; set; } = new ObservableCollection<DepartmentViewModel>();
         #region Properties
-        public Company Company { get; set; }
+        public CompanyDto Company { get; set; }
 
         private string _companyName;
         public string CompanyName
@@ -38,7 +39,7 @@ namespace CompanyAnalyzerWpf.ViewModels
 
         async Task ExecuteLoadDepartmentsCommand()
         {
-            var departments = await _repositoryManager.DepartmentRepository.GetDepartments(Company.CompanyId, false);
+            var departments = await _repositoryManager.DepartmentService.GetDepartments(Company.CompanyId, false);
             Departments.Clear();
             foreach (var item in departments)
             {

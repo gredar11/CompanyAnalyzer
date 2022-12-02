@@ -4,18 +4,21 @@
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
              MinWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="TextBox" BasedOn="{StaticResource StandartTextBox}">
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource StandartButton}">
+        </Style>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource StandartCombobox}">
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <StackPanel>
+            <Label>Department name:</Label>
+
             <TextBox Text="{Binding DepartmentName}"></TextBox>
-            <TextBox >
-                <TextBox.Text>
-                    <MultiBinding StringFormat="{}{0} {1}">
-                        <Binding Path="Head.FirstName" />
-                        <Binding Path="Head.SecondName" />
-                    </MultiBinding>
-                </TextBox.Text>
-            </TextBox>
-            <TextBox Text="{Binding DepartmentName}"></TextBox>
+            <Label>Company:</Label>
+
             <ComboBox ItemsSource="{Binding Companies}" SelectedItem="{Binding Company, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -23,6 +26,8 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            <Label>Department head:</Label>
+
             <ComboBox ItemsSource="{Binding EmployeesOfDepartment}" SelectedItem="{Binding Head, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -37,6 +42,14 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Command="{Binding CloseDialogCommand}" CommandParameter="true">Ok</Button>
+                <Button Grid.Column="1" Command="{Binding CloseDialogCommand}" CommandParameter="false">Cancel</Button>
+            </Grid>
         </StackPanel>
     </Grid>
 </UserControl>

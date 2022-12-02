@@ -3,11 +3,14 @@ using CompanyAnalyzerWpf.ViewModels;
 using CompanyAnalyzerWpf.Views;
 using Contracts.cs.RepositoryContracts;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Persistance;
+using Persistance.Dtos;
 using Persistance.Repositories;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Unity;
+using System.Configuration;
 using System.Windows;
 
 namespace CompanyAnalyzerWpf
@@ -25,28 +28,31 @@ namespace CompanyAnalyzerWpf
         protected override void ConfigureViewModelLocator()
         {
             base.ConfigureViewModelLocator();
-            ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
         }
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            // add dependencies
-            //var b = containerRegistry.Register<CompanyEmployeesDbContext>();
-            //var configuration = new MapperConfiguration(cfg =>
-            //{
-            //    cfg.CreateMap<Employee, Employee>();
-            //    cfg.CreateMap<Department, Department>();
-            //    cfg.CreateMap<Company,Company>();
-
-            //});
-            //containerRegistry.RegisterInstance(typeof(IMapper), new Mapper(configuration));
+            string connString = ConfigurationManager.AppSettings["ConnectionString"].ToString();
             var dbContextFactory = new CompanyEmployeesDbContextFactory();
-            var dbContext = dbContextFactory.CreateDbContext(new string[] { });
-            containerRegistry.RegisterInstance(typeof(RepositoryManager), new RepositoryManager(dbContext));
+            containerRegistry.Register<CompanyEmployeesDbContext>(() => dbContextFactory.CreateDbContext(new string[] { connString }));
+            containerRegistry.Register<RepositoryManager>();
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Employee, EmployeeDto>().ReverseMap();
+
+                cfg.CreateMap<Company, CompanyDto>().ReverseMap();
+
+                cfg.CreateMap<Department, DepartmentDto>().ReverseMap();
+
+            });
+            containerRegistry.RegisterInstance(typeof(IMapper), new Mapper(configuration));
             containerRegistry.RegisterDialog<EditCompanyDialog, EditCompanyDialogViewModel>();
             containerRegistry.RegisterDialog<SalaryReportView, SalaryReportViewModel>();
             containerRegistry.RegisterDialog<EditDepartmentDialog, EditDepartmentDialogViewModel>();
             containerRegistry.RegisterDialog<EditEmployeeDialog, EditEmployeeDialogViewModel>();
             containerRegistry.RegisterDialog<DeleteEntityDialog, DeleteEntityDialogViewModel>();
+            containerRegistry.RegisterDialog<ExperienceReportView, ExperienceReportViewModel>();
+
+            ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
         }
     }
 }

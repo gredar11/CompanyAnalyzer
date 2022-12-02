@@ -20,14 +20,14 @@
     </UserControl.Resources>
     <Grid>
         <Grid.Resources>
-            <CollectionViewSource x:Key="cvsTasks" Source="{Binding Employees}">
+            <CollectionViewSource x:Key="EmployeeCollection" Source="{Binding Employees}">
                 <CollectionViewSource.GroupDescriptions>
                     <PropertyGroupDescription PropertyName="CompanyName"/>
                     <PropertyGroupDescription PropertyName="DepartmentName"/>
                 </CollectionViewSource.GroupDescriptions>
             </CollectionViewSource>
         </Grid.Resources>
-        <DataGrid ItemsSource="{Binding Source={StaticResource cvsTasks}}" CanUserDeleteRows="False">
+        <DataGrid ItemsSource="{Binding Source={StaticResource EmployeeCollection}}" CanUserDeleteRows="False">
             
             <DataGrid.GroupStyle>
                 <!-- Style for groups at top level. -->
@@ -62,7 +62,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type GroupItem}">
-                                        <Expander IsExpanded="True" Background="#FF112255" BorderBrush="#FF002255" Foreground="#FFEEEEEE" BorderThickness="1,1,1,5">
+                                        <Expander IsExpanded="True" Background="CadetBlue" BorderBrush="#FF002255" Foreground="#FFEEEEEE" BorderThickness="1,1,1,5">
                                             <Expander.Header>
                                                 <DockPanel>
                                                     <TextBlock FontWeight="Bold" Text="{Binding Path=Name , StringFormat={}Department name: {0}}" />

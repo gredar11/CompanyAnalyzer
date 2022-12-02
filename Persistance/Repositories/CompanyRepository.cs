@@ -23,7 +23,7 @@ namespace Persistance.Repositories
 
         public async Task DeleteCompany(Guid id)
         {
-            var company = await GetCompany(id, true);
+            var company = RepositoryContext.Companies.Find(id);
             Delete(company);
         }
 
@@ -41,7 +41,7 @@ namespace Persistance.Repositories
 
         public void UpdateCompany(Company company)
         {
-            Update(company);
+            RepositoryContext.Update(company);
         }
     }
 }

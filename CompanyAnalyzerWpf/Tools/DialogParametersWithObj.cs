@@ -10,8 +10,10 @@ namespace CompanyAnalyzerWpf.Tools
     public class DialogParametersWithObj: DialogParameters
     {
         public object RequestParameter;
-        public DialogParametersWithObj(object requestParameter)
+        public bool CreateNew;
+        public DialogParametersWithObj(object requestParameter, bool createNew)
         {
+            CreateNew = createNew;
             RequestParameter = requestParameter;
         }
     }

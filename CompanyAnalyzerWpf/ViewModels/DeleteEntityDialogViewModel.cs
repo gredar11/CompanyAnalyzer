@@ -13,8 +13,8 @@ namespace CompanyAnalyzerWpf.ViewModels
 {
     public class DeleteEntityDialogViewModel : BindableBase, IDialogAware
     {
-        private readonly RepositoryManager _repositoryManager;
-        public DeleteEntityDialogViewModel(RepositoryManager repositoryManager)
+        private readonly PersistanceServiceManager _repositoryManager;
+        public DeleteEntityDialogViewModel(PersistanceServiceManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
         }
@@ -90,8 +90,7 @@ namespace CompanyAnalyzerWpf.ViewModels
         {
             if (result.Result == ButtonResult.OK)
             {
-                _repositoryManager.CompanyRepository.DeleteCompany((Entity as CompanyViewModel).Company.CompanyId);
-                _repositoryManager.SaveAsync();
+                _repositoryManager.CompanyService.DeleteCompany((Entity as CompanyViewModel).Company.CompanyId);
             }
         }
         private void DeleteDepartment(IDialogResult result)
@@ -99,8 +98,7 @@ namespace CompanyAnalyzerWpf.ViewModels
             if (result.Result == ButtonResult.OK)
             {
                 var dep = (Entity as DepartmentViewModel).Department!;
-                _repositoryManager.DepartmentRepository.DeleteDepartment(dep.CompanyId.Value, dep.DepartmentId);
-                _repositoryManager.SaveAsync();
+                _repositoryManager.DepartmentService.DeleteDepartment(dep.DepartmentId);
             }
         }
         private void DeleteEmployee(IDialogResult result)
@@ -108,8 +106,7 @@ namespace CompanyAnalyzerWpf.ViewModels
             if (result.Result == ButtonResult.OK)
             {
                 var employee = (Entity as EmployeeViewModel).Employee!;
-                _repositoryManager.EmployeeRepository.DeleteEmployee(employee.Department.CompanyId.Value, employee.DepartmentId.Value, employee.EmployeeId);
-                _repositoryManager.SaveAsync();
+                _repositoryManager.EmployeeService.DeleteEmployee(employee.EmployeeId);
             }
         }
     }

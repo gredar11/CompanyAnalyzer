@@ -6,19 +6,19 @@
              xmlns:local="clr-namespace:CompanyAnalyzerWpf.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource StandartTextBlock}"></Style>
+    </UserControl.Resources>
     <Grid>
         <StackPanel>
+
+            <TextBlock Text="Department Name:" FontWeight="Bold"></TextBlock>
             <TextBlock Text="{Binding Department.DepartmentName}"></TextBlock>
-            <TextBlock Text="{Binding Department.Company.CompanyName}"></TextBlock>
-            
-            <TextBlock>
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0} {1}">
-                        <Binding Path="Department.Head.FirstName" />
-                        <Binding Path="Department.Head.SecondName" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
+            <TextBlock Text="Company Name:" FontWeight="Bold"></TextBlock>
+            <TextBlock Text="{Binding CompanyName}"></TextBlock>
+            <TextBlock Text="Head Name:" FontWeight="Bold"></TextBlock>
+            <TextBlock Text="{Binding HeadName}"></TextBlock>
+
         </StackPanel>
     </Grid>
 </UserControl>

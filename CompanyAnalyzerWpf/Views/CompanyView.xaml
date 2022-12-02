@@ -3,10 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="False">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource StandartTextBlock}"></Style>
+    </UserControl.Resources>
     <Grid>
         <StackPanel>
+            <TextBlock Text="CompanyName:" FontWeight="ExtraBold"></TextBlock>
             <TextBlock Text="{Binding Company.CompanyName}"></TextBlock>
+
+            <TextBlock Text="Adress:" FontWeight="Bold"></TextBlock>
             <TextBlock Text="{Binding Company.Adress}"></TextBlock>
+
+            <TextBlock Text="EstablishmentDate:" FontWeight="Bold"></TextBlock>
             <TextBlock Text="{Binding Company.EstablishmentDate}"></TextBlock>
         </StackPanel>
     </Grid>

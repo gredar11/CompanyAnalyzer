@@ -6,19 +6,19 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              MinWidth="300">
     <UserControl.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="10"></Setter>
+        <Style TargetType="TextBox" BasedOn="{StaticResource StandartTextBox}">
         </Style>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="5"></Setter>
+        <Style TargetType="Button" BasedOn="{StaticResource StandartButton}">
         </Style>
         <tools:DateConverter x:Key="DateConverter"></tools:DateConverter>
     </UserControl.Resources>
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+            <Label>Company name:</Label>
             <TextBox Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
-            
+            <Label>Establishment date:</Label>
             <DatePicker Text="{Binding EstablishmentDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
+            <Label>Adress:</Label>
             <TextBox Text="{Binding Adress, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
             <Grid>
                 <Grid.ColumnDefinitions>

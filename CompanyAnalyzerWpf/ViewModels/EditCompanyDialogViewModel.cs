@@ -2,6 +2,7 @@
 using CompanyAnalyzerWpf.Tools;
 using Domain.Models;
 using Persistance;
+using Persistance.Dtos;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -14,12 +15,13 @@ namespace CompanyAnalyzerWpf.ViewModels
 {
     public class EditCompanyDialogViewModel : BindableBase, IDialogAware
     {
-        private readonly RepositoryManager _repositoryManager;
-        public EditCompanyDialogViewModel(RepositoryManager repositoryManager)
+        private readonly PersistanceServiceManager _repositoryManager;
+        private bool newEntity = false;
+        public EditCompanyDialogViewModel(PersistanceServiceManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
         }
-        public CompanyViewModel CompanyViewModel;
+        public CompanyDto CompanyModel { get; set; }
         private string _companyName;
         public string CompanyName
         {
@@ -59,12 +61,10 @@ namespace CompanyAnalyzerWpf.ViewModels
 
             if (parameter?.ToLower() == "true")
             {
-                CompanyViewModel.Company.EstablishmentDate = EstablishmentDate;
-                CompanyViewModel.Company.CompanyName = CompanyName;
-                CompanyViewModel.CompanyName = CompanyName;
-                CompanyViewModel.Company.Adress = Adress;
-                _repositoryManager.CompanyRepository.UpdateCompany(CompanyViewModel.Company);
-                _repositoryManager.SaveAsync();
+                CompanyModel.EstablishmentDate = EstablishmentDate;
+                CompanyModel.CompanyName = CompanyName;
+                CompanyModel.Adress = Adress;
+               
                 result = ButtonResult.OK;
             }
             else if (parameter?.ToLower() == "false")
@@ -90,10 +90,10 @@ namespace CompanyAnalyzerWpf.ViewModels
         public void OnDialogOpened(IDialogParameters parameters)
         {
             var repuestObject = (parameters as DialogParametersWithObj).RequestParameter;
-                CompanyViewModel = (CompanyViewModel)repuestObject;
-            CompanyName = CompanyViewModel.Company.CompanyName;
-            Adress = CompanyViewModel.Company.Adress;
-            EstablishmentDate = CompanyViewModel.Company.EstablishmentDate;
+            CompanyModel = (CompanyDto)repuestObject;
+            CompanyName = CompanyModel.CompanyName;
+            Adress = CompanyModel.Adress;
+            EstablishmentDate = CompanyModel.EstablishmentDate;
         }
     }
 }

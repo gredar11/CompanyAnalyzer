@@ -14,8 +14,8 @@ namespace CompanyAnalyzerWpf.ViewModels
 {
     public class SalaryReportViewModel : BindableBase, IDialogAware
     {
-        private readonly RepositoryManager _repositoryManager;
-        public SalaryReportViewModel(RepositoryManager repositoryManager)
+        private readonly PersistanceServiceManager _repositoryManager;
+        public SalaryReportViewModel(PersistanceServiceManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
 
@@ -41,13 +41,13 @@ namespace CompanyAnalyzerWpf.ViewModels
             List<EmployeeSalaryViewModel> models = new List<EmployeeSalaryViewModel>();
             await Task.Run(async () =>
             {
-                var companies = await _repositoryManager.CompanyRepository.GetAll(false);
+                var companies = await _repositoryManager.CompanyService.GetAll(false);
                 foreach (var company in companies)
                 {
-                    var companyDepartments = await _repositoryManager.DepartmentRepository.GetDepartments(company.CompanyId, false);
+                    var companyDepartments = await _repositoryManager.DepartmentService.GetDepartments(company.CompanyId, false);
                     foreach (var department in companyDepartments)
                     {
-                        var employees = await _repositoryManager.EmployeeRepository.GetAllEmployeesByCompany(company.CompanyId, department.DepartmentId, false);
+                        var employees = await _repositoryManager.EmployeeService.GetAllEmployeesByCompany(company.CompanyId, department.DepartmentId, false);
                         foreach (var employee in employees)
                         {
                             App.Current.Dispatcher.Invoke((Action)delegate

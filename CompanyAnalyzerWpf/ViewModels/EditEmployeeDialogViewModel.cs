@@ -1,6 +1,7 @@
 ﻿using CompanyAnalyzerWpf.Tools;
 using Domain.Models;
 using Persistance;
+using Persistance.Dtos;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -14,14 +15,13 @@ namespace CompanyAnalyzerWpf.ViewModels
 {
     public class EditEmployeeDialogViewModel : BindableBase, IDialogAware
     {
-        private readonly RepositoryManager _repositoryManager;
+        private readonly PersistanceServiceManager _repositoryManager;
 
-        public EditEmployeeDialogViewModel(RepositoryManager repositoryManager)
+        public EditEmployeeDialogViewModel(PersistanceServiceManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
         }
-        EmployeeViewModel viewModel;
-        public Employee Employee { get; set; }
+        public EmployeeDto Employee { get; set; }
         private string _firstName;
         public string FirstName
         {
@@ -58,10 +58,10 @@ namespace CompanyAnalyzerWpf.ViewModels
             get { return _salary; }
             set { SetProperty(ref _salary, value); }
         }
-        public ObservableCollection<Department> Departments { get; set; } = new ObservableCollection<Department>();
-        public ObservableCollection<Company> Companies { get; set; } = new ObservableCollection<Company>();
-        private Department _empDepartment;
-        public Department EmpDepartment
+        public ObservableCollection<DepartmentDto> Departments { get; set; } = new ObservableCollection<DepartmentDto>();
+        public ObservableCollection<CompanyDto> Companies { get; set; } = new ObservableCollection<CompanyDto>();
+        private DepartmentDto _empDepartment;
+        public DepartmentDto EmpDepartment
         {
             get { return _empDepartment; }
             set
@@ -69,20 +69,46 @@ namespace CompanyAnalyzerWpf.ViewModels
                 SetProperty(ref _empDepartment, value);
             }
         }
-        private Company _company;
-        public Company Company
+        private CompanyDto _company;
+        public CompanyDto Company
         {
             get { return _company; }
-            set { 
+            set
+            {
                 SetProperty(ref _company, value);
                 Departments.Clear();
-                Departments.AddRange(_repositoryManager.DepartmentRepository.GetDepartments(Company.CompanyId, false).Result);
+                if (Company is not null)
+                    Departments.AddRange(_repositoryManager.DepartmentService.GetDepartments(Company.CompanyId, false).Result);
             }
         }
         public string Title => $"Editing {FirstName} {SecondName}";
 
         public event Action<IDialogResult> RequestClose;
+        protected virtual void CloseDialog(string parameter)
+        {
+            ButtonResult result = ButtonResult.None;
 
+            if (parameter?.ToLower() == "true")
+            {
+                Employee.FirstName = FirstName;
+                Employee.SecondName = SecondName;
+                Employee.Salary = Salary;
+                Employee.Post = Post;
+                Employee.DateOfBirth = DateOfBirth;
+                Employee.EmploymentDate = EmploymentDate;
+                Employee.DepartmentId = EmpDepartment.DepartmentId;
+                result = ButtonResult.OK;
+            }
+            else if (parameter?.ToLower() == "false")
+                result = ButtonResult.Cancel;
+
+            RaiseRequestClose(new DialogResult(result));
+        }
+
+        public virtual void RaiseRequestClose(IDialogResult dialogResult)
+        {
+            RequestClose?.Invoke(dialogResult);
+        }
         public bool CanCloseDialog()
         {
             return true;
@@ -92,21 +118,28 @@ namespace CompanyAnalyzerWpf.ViewModels
         {
 
         }
+        private DelegateCommand<string> _closeDialogCommand;
+        public DelegateCommand<string> CloseDialogCommand =>
+            _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
+
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
-            var repuestObject = (parameters as DialogParametersWithObj).RequestParameter;
-            viewModel = (EmployeeViewModel)repuestObject;
-            Employee = viewModel.Employee;
+            var requestObject = (parameters as DialogParametersWithObj);
+            Employee = (EmployeeDto)requestObject.RequestParameter;
             FirstName = Employee.FirstName;
             SecondName = Employee.SecondName;
             Salary = Employee.Salary;
             Post = Employee.Post;
             DateOfBirth = Employee.DateOfBirth;
             EmploymentDate = Employee.EmploymentDate;
-            EmpDepartment = Employee.Department;
-            Company = Employee.Department.Company;
-            Companies.AddRange(_repositoryManager.CompanyRepository.GetAll(false).Result);
+            if (!requestObject.CreateNew)
+            {
+                EmpDepartment = _repositoryManager.DepartmentService.GetDepartmentById(Employee.DepartmentId.Value, false).Result;
+                Company = _repositoryManager.CompanyService.GetCompany(EmpDepartment.CompanyId.Value, false).Result;
+            }
+            Companies.AddRange(_repositoryManager.CompanyService.GetAll(false).Result);
+            
         }
     }
 }

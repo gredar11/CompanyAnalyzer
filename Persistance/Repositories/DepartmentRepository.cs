@@ -3,6 +3,7 @@ using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,13 +18,13 @@ namespace Persistance.Repositories
 
         public void CreateDepartment(Department department)
         {
-            Create(department);
+            RepositoryContext.Set<Department>().Add(department);
         }
 
-        public async Task DeleteDepartment(Guid companyId, Guid departmentId)
+        public async Task DeleteDepartment(Guid id)
         {
-            var department = await GetDepartmentById(companyId, departmentId, trackChanges: true);
-            Delete(department);
+            var entity = RepositoryContext.Set<Department>().Find(id);
+            Delete(entity);
         }
 
         public async Task<Department> GetDepartmentById(Guid companyId, Guid departmentId, bool trackChanges)
@@ -32,15 +33,21 @@ namespace Persistance.Repositories
             return result;
         }
 
+        public async Task<Department> GetDepartmentById(Guid departmentId, bool trackChanges)
+        {
+            var result = await FindByCondition(x => x.DepartmentId == departmentId, trackChanges).SingleOrDefaultAsync();
+            return result;
+        }
+
         public async Task<IEnumerable<Department>> GetDepartments(Guid companyId, bool trackChanges)
         {
-            var departments = await FindByCondition(x => x.CompanyId == companyId, trackChanges).Include(x => x.Head).Include(x => x.Company).ToListAsync();
+            var departments = await FindByCondition(x => x.CompanyId == companyId, trackChanges).Include(x => x.Head).Include(x => x.Company).AsNoTracking().ToListAsync();
             return departments;
         }
 
         public void UpdateDepartment(Department department)
         {
-            Update(department);
+            RepositoryContext.Update(department);
         }
     }
 }

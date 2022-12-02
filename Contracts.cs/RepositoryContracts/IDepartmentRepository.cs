@@ -11,7 +11,8 @@ namespace Contracts.cs.RepositoryContracts
     {
         Task<IEnumerable<Department>> GetDepartments(Guid companyId, bool trackChanges);
         Task<Department> GetDepartmentById(Guid companyId, Guid departmentId, bool trackChanges);
-        Task DeleteDepartment(Guid companyId, Guid departmentId);
+        Task<Department> GetDepartmentById(Guid departmentId, bool trackChanges);
+        Task DeleteDepartment(Guid id);
         void UpdateDepartment(Department department);
         void CreateDepartment(Department department);
     }

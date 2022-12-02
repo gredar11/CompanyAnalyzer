@@ -7,15 +7,19 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:local="clr-namespace:CompanyAnalyzerWpf"
         xmlns:vms="clr-namespace:CompanyAnalyzerWpf.ViewModels"
-        xmlns:domain="clr-namespace:Domain.Models;assembly=Domain"
+        xmlns:dto="clr-namespace:Persistance.Dtos;assembly=Persistance"
         xmlns:tools="clr-namespace:CompanyAnalyzerWpf.Tools"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:views="clr-namespace:CompanyAnalyzerWpf.Views"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Background="LightGray">
         <Grid.Resources>
+            <Style TargetType="TextBox" BasedOn="{StaticResource StandartTextBox}">
+            </Style>
+            <Style TargetType="Button" BasedOn="{StaticResource StandartButton}">
+            </Style>
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
             <DataTemplate DataType="{x:Type vms:CompanyViewModel}">
                 <views:CompanyView></views:CompanyView>
@@ -35,10 +39,12 @@
             <ColumnDefinition Width="2*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Width="100" Command="{Binding LoadCompaniesAsync}">Load entities</Button>
-            <Button Width="100" Command="{Binding ShowSalaryReportCommand}">ShowReport</Button>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="0">
+            <Button Width="130" Command="{Binding ShowExperienceReportCommand}">Experience Report</Button>
+            <Button Width="100" Command="{Binding ShowSalaryReportCommand}">Salary Report</Button>
         </StackPanel>
+        <Button Grid.Column="1" Width="100" Command="{Binding LoadCompaniesAsync}">Load entities</Button>
+
         <fa:ImageAwesome Grid.Row="1" Panel.ZIndex="1" Width="40" Icon="Spinner" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}" Spin="{Binding IsLoading}" SpinDuration="10" />
         <TreeView Grid.Row="1" x:Name="MainTreeView" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch" ItemsSource="{Binding Companies}" >
             <inter:Interaction.Behaviors>
@@ -46,8 +52,10 @@
             </inter:Interaction.Behaviors>
             <TreeView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Add" Command="{Binding }" CommandParameter="{Binding SelectedItem}"/>
-                    <MenuItem Header="Edit" Command="{Binding EditDialogCommand}" CommandParameter="{Binding SelectedItem}"/>
+                    <MenuItem Header="Add Company" Command="{Binding EditCreateDialogCommand}" CommandParameter="{x:Type dto:CompanyDto}"/>
+                    <MenuItem Header="Add Department" Command="{Binding EditCreateDialogCommand}" CommandParameter="{x:Type dto:DepartmentDto}"/>
+                    <MenuItem Header="Add Employee" Command="{Binding EditCreateDialogCommand}" CommandParameter="{x:Type dto:EmployeeDto}"/>
+                    <MenuItem Header="Edit" Command="{Binding EditCreateDialogCommand}" CommandParameter="false"/>
                     <MenuItem Header="Delete" Command="{Binding DeleteDialogCommand}" CommandParameter="{Binding SelectedItem}"/>
                 </ContextMenu>
             </TreeView.ContextMenu>

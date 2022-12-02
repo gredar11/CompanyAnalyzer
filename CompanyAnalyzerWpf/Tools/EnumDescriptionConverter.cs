@@ -12,8 +12,8 @@ namespace CompanyAnalyzerWpf.Tools
 {
     public enum Options
     {
-        [Description("Стаж")]
-        Experience,
+        [Description("Год рождения")]
+        YearOfBirth,
         [Description("Возраст")]
         Age
     }

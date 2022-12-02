@@ -1,7 +1,9 @@
 ﻿using CompanyAnalyzerWpf.Commands;
 using CompanyAnalyzerWpf.Extensions;
 using CompanyAnalyzerWpf.Tools;
+using Domain.Models;
 using Persistance;
+using Persistance.Dtos;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -21,9 +23,9 @@ namespace CompanyAnalyzerWpf.ViewModels
             private set => SetProperty(ref _isLoading, value);
         }
         private bool _dataIsLoaded = false;
-        private readonly RepositoryManager _repositoryManager;
+        private readonly PersistanceServiceManager _repositoryManager;
         private readonly IDialogService _dialogService;
-        public MainWindowViewModel(RepositoryManager repositoryManager, IDialogService dialogService)
+        public MainWindowViewModel(PersistanceServiceManager repositoryManager, IDialogService dialogService)
         {
             _repositoryManager = repositoryManager;
             _dialogService = dialogService;
@@ -44,8 +46,9 @@ namespace CompanyAnalyzerWpf.ViewModels
                 IsLoading = true;
                 var companies = await Task.Run(async () =>
                 {
-                    return await _repositoryManager.CompanyRepository.GetAll(false);
+                    return await _repositoryManager.CompanyService.GetAll(false);
                 });
+                Companies.Clear();
                 foreach (var company in companies)
                 {
                     Companies.Add(new CompanyViewModel(_repositoryManager) { Company = company });
@@ -69,47 +72,110 @@ namespace CompanyAnalyzerWpf.ViewModels
         public ObservableCollection<CompanyViewModel> Companies { get; set; } = new ObservableCollection<CompanyViewModel>();
 
         #region DialogCommands
-        private DelegateCommand<object> _showDialogCommand;
-        public DelegateCommand<object> EditDialogCommand =>
-            _showDialogCommand ?? (_showDialogCommand = new DelegateCommand<object>(ExecuteEditDialogCommand));
+        private DelegateCommand<object> _editCreateCommand;
+        public DelegateCommand<object> EditCreateDialogCommand =>
+            _editCreateCommand ?? (_editCreateCommand = new DelegateCommand<object>(ExecuteEditCreateDialogCommand));
 
-        void ExecuteEditDialogCommand(object selectedItem)
+        void ExecuteEditCreateDialogCommand(object parameter)
         {
-            if (selectedItem is CompanyViewModel)
+            if (parameter is Type)
             {
-                _dialogService.ShowDialog("EditCompanyDialog", new DialogParametersWithObj(SelectedItem), r =>
-                {
-                    if (r.Result == ButtonResult.OK)
-                        RaisePropertyChanged(nameof(CompanyViewModel.CompanyName));
-                });
+                var type = (Type)parameter;
+                object entityInstance = Activator.CreateInstance(type);
+                ShowDialogCreate(entityInstance);
+                return;
             }
-            else if (selectedItem is DepartmentViewModel)
+            ShowDialogWindowEdit();
+        }
+        private async void ShowDialogCreate(object itemToCreateOrEdit)
+        {
+            switch (itemToCreateOrEdit)
             {
-                _dialogService.ShowDialog("EditDepartmentDialog", new DialogParametersWithObj(SelectedItem), r =>
-                {
-                    if (r.Result == ButtonResult.OK)
-                        RaisePropertyChanged(nameof(CompanyViewModel.CompanyName));
-                });
-            }
-            else if (selectedItem is EmployeeViewModel)
-            {
-                _dialogService.ShowDialog("EditEmployeeDialog", new DialogParametersWithObj(SelectedItem), r =>
-                {
-                    if (r.Result == ButtonResult.OK)
-                        RaisePropertyChanged(nameof(CompanyViewModel.CompanyName));
-                });
+                case CompanyDto company:
+                    _dialogService.ShowDialog("EditCompanyDialog", new DialogParametersWithObj(itemToCreateOrEdit, true), async r =>
+                    {
+                        // обновить коллекции
+                        if (r.Result == ButtonResult.OK)
+                        {
+                            _repositoryManager.CompanyService.CreateCompany(company);
+                            await ExecuteLoadCompaniesAsync();
+                        }
+                    });
+                    break;
+                case DepartmentDto department:
+                    _dialogService.ShowDialog("EditDepartmentDialog", new DialogParametersWithObj(itemToCreateOrEdit, true), async r =>
+                    {
+                        // обновить коллекции
+                        if (r.Result == ButtonResult.OK)
+                        {
+                            _repositoryManager.DepartmentService.CreateDepartment(department);
+                            await ExecuteLoadCompaniesAsync();
+
+                        }
+                    });
+                    break;
+                case EmployeeDto employee:
+                    _dialogService.ShowDialog("EditEmployeeDialog", new DialogParametersWithObj(itemToCreateOrEdit, true), async r =>
+                    {
+                        if (r.Result == ButtonResult.OK)
+                        {
+                            _repositoryManager.EmployeeService.CreateEmployee(employee);
+                            await ExecuteLoadCompaniesAsync();
+                        }
+                    });
+                    break;
             }
         }
+        private async void ShowDialogWindowEdit()
+        {
+            switch (SelectedItem)
+            {
+                case CompanyViewModel companyViewModel:
+                    _dialogService.ShowDialog("EditCompanyDialog", new DialogParametersWithObj(companyViewModel.Company, false), async r =>
+                    {
+                        // обновить коллекции
+                        if (r.Result == ButtonResult.OK)
+                        {
+                            _repositoryManager.CompanyService.UpdateCompany(companyViewModel.Company);
+                            await ExecuteLoadCompaniesAsync();
+                        }
+                    });
+                    break;
+                case DepartmentViewModel departmentViewModel:
+                    _dialogService.ShowDialog("EditDepartmentDialog", new DialogParametersWithObj(departmentViewModel.Department, false), async r =>
+                    {
+                        if (r.Result == ButtonResult.OK)
+                        {
+                            _repositoryManager.DepartmentService.UpdateDepartment(departmentViewModel.Department);
+                            await ExecuteLoadCompaniesAsync();
+                        }
+                    });
+                    break;
+                case EmployeeViewModel employeeViewModel:
+                    _dialogService.ShowDialog("EditEmployeeDialog", new DialogParametersWithObj(employeeViewModel.Employee, false), async r =>
+                    {
+                        if (r.Result == ButtonResult.OK)
+                        {
+                            _repositoryManager.EmployeeService.UpdateEmployee(employeeViewModel.Employee);
+                            await ExecuteLoadCompaniesAsync();
+                        }
+                    });
+                    break;
+            }
+        }
+
         private DelegateCommand<object> _deleteDialogCommand;
         public DelegateCommand<object> DeleteDialogCommand =>
             _deleteDialogCommand ?? (_deleteDialogCommand = new DelegateCommand<object>(ExecuteDeleteDialogCommand));
 
-        void ExecuteDeleteDialogCommand(object selectedItem)
+        async void ExecuteDeleteDialogCommand(object selectedItem)
         {
-            _dialogService.ShowDialog("DeleteEntityDialog", new DialogParametersWithObj(SelectedItem), r =>
+            _dialogService.ShowDialog("DeleteEntityDialog", new DialogParametersWithObj(selectedItem, false), async r =>
             {
-                //if (r.Result == ButtonResult.OK)
-                //    RaisePropertyChanged(nameof(CompanyViewModel.CompanyName));
+                if (r.Result == ButtonResult.OK)
+                {
+                    await ExecuteLoadCompaniesAsync();
+                }
             });
         }
         private DelegateCommand _showSalaryReport;
@@ -119,6 +185,14 @@ namespace CompanyAnalyzerWpf.ViewModels
         async void ExecuteShowSalaryReportCommand()
         {
             await _dialogService.ShowDialogAsync("SalaryReportView", new DialogParameters(""));
+        }
+        private DelegateCommand _showExperienceReport;
+        public DelegateCommand ShowExperienceReportCommand =>
+            _showExperienceReport ?? (_showExperienceReport = new DelegateCommand(ExecuteShowExperienceReport));
+
+        async void ExecuteShowExperienceReport()
+        {
+            await _dialogService.ShowDialogAsync("ExperienceReportView", new DialogParameters(""));
         }
         #endregion
     }
