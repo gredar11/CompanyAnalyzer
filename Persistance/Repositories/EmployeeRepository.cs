@@ -51,14 +51,22 @@ namespace Persistance.Repositories
 
         public async Task<Employee> GetEmployeeById(Guid employeeId, bool trackChanges)
         {
-            
+
             var res = await FindByCondition(x => x.EmployeeId == employeeId, trackChanges).SingleOrDefaultAsync();
             return res;
         }
 
         public void UpdateEmployee(Employee employee)
         {
-            Update(employee);
+            try
+            {
+
+                Update(employee);
+            }
+            catch
+            {
+
+            }
         }
     }
 }
