@@ -45,9 +45,9 @@ namespace Persistance.Services
 
         public void UpdateEmployee(EmployeeDto employee)
         {
-            var entity = _repositoryManager.EmployeeRepository.GetEmployeeById(employee.EmployeeId, false).Result;
+            var entity = _repositoryManager.EmployeeRepository.GetEmployeeById(employee.EmployeeId, true).Result;
             _mapper.Map(employee, entity);
-            _repositoryManager.EmployeeRepository.UpdateEmployee(entity);
+            //_repositoryManager.EmployeeRepository.UpdateEmployee(entity);
             _repositoryManager.SaveAsync();
         }
     }

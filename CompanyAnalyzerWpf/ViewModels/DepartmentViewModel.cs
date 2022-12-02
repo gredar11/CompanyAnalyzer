@@ -31,7 +31,8 @@ namespace CompanyAnalyzerWpf.ViewModels
                 if (value.HeadEmployeeId.HasValue && value.CompanyId.HasValue)
                 {
                     var head = _repositoryManager.EmployeeService.GetEmployeeById(value.CompanyId.Value, value.DepartmentId, value.HeadEmployeeId.Value, false).Result;
-                    HeadName = head.FirstName + " " + head.SecondName;
+                    if (head is not null)
+                        HeadName = head.FirstName + " " + head.SecondName;
                 }
                 if (value.CompanyId.HasValue)
                 {

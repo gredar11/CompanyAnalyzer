@@ -56,7 +56,7 @@ namespace Persistance.Services
         {
             var entity = _repositoryManager.DepartmentRepository.GetDepartmentById(department.CompanyId.Value, department.DepartmentId, true).Result;
             _mapper.Map(department, entity);
-            _repositoryManager.DepartmentRepository.UpdateDepartment(entity);
+            //_repositoryManager.DepartmentRepository.UpdateDepartment(entity);
             _repositoryManager.SaveAsync();
         }
     }

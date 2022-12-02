@@ -43,7 +43,8 @@ namespace Persistance.Repositories
             var company = await RepositoryContext.Set<Company>().Where(x => x.CompanyId == companyId).Include(x => x.Departments).AsNoTracking().FirstOrDefaultAsync();
             if (company == null)
                 return null;
-            if (!company.Departments.Any(x => x.DepartmentId == departmentId))
+            var departments = RepositoryContext.Set<Department>().Where(x => x.CompanyId == companyId).AsNoTracking().ToList();
+            if (!departments.Any(x => x.DepartmentId == departmentId))
                 return null;
             var res = await FindByCondition(x => x.DepartmentId == departmentId && x.EmployeeId == employeeId, trackChanges).SingleOrDefaultAsync();
             return res;
@@ -58,15 +59,7 @@ namespace Persistance.Repositories
 
         public void UpdateEmployee(Employee employee)
         {
-            try
-            {
-
-                Update(employee);
-            }
-            catch
-            {
-
-            }
+            Update(employee);
         }
     }
 }

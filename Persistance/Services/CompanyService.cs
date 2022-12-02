@@ -47,7 +47,7 @@ namespace Persistance.Services
         {
             var entity = _repositoryManager.CompanyRepository.GetCompany(company.CompanyId, true).Result;
             _mapper.Map(company, entity);
-            _repositoryManager.CompanyRepository.UpdateCompany(entity);
+            //_repositoryManager.CompanyRepository.UpdateCompany(entity);
             _repositoryManager.SaveAsync();
         }
     }
