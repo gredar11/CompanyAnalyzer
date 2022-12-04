@@ -92,7 +92,7 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
                     Departments.AddRange(_repositoryManager.DepartmentService.GetDepartments(Company.CompanyId, false).Result);
             }
         }
-        public string Title => $"Editing {FirstName} {SecondName}";
+        public string Title { get; set; }
 
         public event Action<IDialogResult> RequestClose;
         protected virtual void CloseDialog(string parameter)
@@ -157,8 +157,15 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
             EmploymentDate = Employee.EmploymentDate;
             if (!requestObject.CreateNew)
             {
+                Title = $"Editing {FirstName} {SecondName}";
                 EmpDepartment = _repositoryManager.DepartmentService.GetDepartmentById(Employee.DepartmentId.Value, false).Result;
                 Company = _repositoryManager.CompanyService.GetCompany(EmpDepartment.CompanyId.Value, false).Result;
+            }
+            else
+            {
+                Title = "Creating new employee";
+                DateOfBirth = new DateOnly(2000, 01, 01);
+                EmploymentDate = DateOnly.FromDateTime(DateTime.Now);
             }
             Companies.AddRange(_repositoryManager.CompanyService.GetAll(false).Result);
 

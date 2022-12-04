@@ -52,9 +52,11 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
             return !string.IsNullOrEmpty(Adress) && !string.IsNullOrEmpty(CompanyName) || param == "false";
         }
         private DelegateCommand<string> _closeDialogCommand;
+
         public DelegateCommand<string> CloseDialogCommand =>
-            _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog, CanSaveEntity));
-        public string Title => "Edit company";
+                    _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog, CanSaveEntity));
+
+        public string Title { get; set; }
 
         public event Action<IDialogResult> RequestClose;
         protected virtual void CloseDialog(string parameter)
@@ -91,11 +93,20 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
-            var repuestObject = (parameters as DialogParametersWithObj).RequestParameter;
-            CompanyModel = (CompanyDto)repuestObject;
+            var requestObject = (parameters as DialogParametersWithObj);
+            CompanyModel = (CompanyDto)requestObject?.RequestParameter;
             CompanyName = CompanyModel.CompanyName;
             Adress = CompanyModel.Adress;
             EstablishmentDate = CompanyModel.EstablishmentDate;
+            if (requestObject.CreateNew)
+            {
+                Title = "Creating new company";
+                EstablishmentDate = DateOnly.FromDateTime(DateTime.Now);
+            }
+            else
+            {
+                Title = $"Edititng {CompanyName}";
+            }
         }
     }
 }

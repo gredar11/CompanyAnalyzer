@@ -28,7 +28,7 @@
             </CollectionViewSource>
         </Grid.Resources>
         <DataGrid ItemsSource="{Binding Source={StaticResource EmployeeCollection}}" CanUserDeleteRows="False">
-            
+
             <DataGrid.GroupStyle>
                 <!-- Style for groups at top level. -->
                 <GroupStyle>
@@ -42,7 +42,7 @@
                                             <Expander.Header>
                                                 <DockPanel>
                                                     <TextBlock FontWeight="Bold" Text="{Binding Path=Name , StringFormat={}Company name: {0}}" />
-                                                    <TextBlock FontWeight="Bold" Margin="20 0 0 0" Text="{Binding Path=Items,Converter={StaticResource TotalSalaryConverter}, StringFormat={}Total: {0}}"></TextBlock>
+                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=Items,Converter={StaticResource TotalSalaryConverter}, StringFormat={}Total: {0}}" Foreground="Coral" Margin="30 0 0 0"></TextBlock>
                                                 </DockPanel>
                                             </Expander.Header>
                                             <Expander.Content>
@@ -67,7 +67,7 @@
                                                 <DockPanel>
                                                     <TextBlock FontWeight="Bold" Text="{Binding Path=Name , StringFormat={}Department name: {0}}" />
                                                     <TextBlock Margin="20 0 0 0" Text="{Binding Path=ItemCount, StringFormat={}Employees count: {0}}"/>
-                                                    <TextBlock FontWeight="Bold" Margin="20 0 0 0" Text="{Binding Path=Items,Converter={StaticResource TotalSalaryConverter}, StringFormat={}Total: {0}}"></TextBlock>
+                                                    <TextBlock FontWeight="Bold" Margin="30 0 0 0" Text="{Binding Path=Items,Converter={StaticResource TotalSalaryConverter}, StringFormat={}Total: {0}}" Foreground="DarkRed" ></TextBlock>
                                                 </DockPanel>
                                             </Expander.Header>
                                             <Expander.Content>

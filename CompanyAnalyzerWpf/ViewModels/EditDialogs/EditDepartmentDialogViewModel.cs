@@ -55,7 +55,7 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
         }
         public ObservableCollection<EmployeeDto> EmployeesOfDepartment { get; set; } = new ObservableCollection<EmployeeDto>();
 
-        public string Title => $"Editing department {Department.DepartmentName}";
+        public string Title { get; set; }
         protected virtual void CloseDialog(string parameter)
         {
             ButtonResult result = ButtonResult.None;
@@ -101,9 +101,14 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
             DepartmentName = Department.DepartmentName;
             if (!requestObject.CreateNew)
             {
+                Title = $"Editing {DepartmentName}";
                 if (Department.HeadEmployeeId.HasValue)
                     Head = _repositoryManager.EmployeeService.GetEmployeeById(Department.CompanyId.Value, Department.DepartmentId, Department.HeadEmployeeId.Value, false).Result;
                 Company = _repositoryManager.CompanyService.GetCompany(Department.CompanyId.Value, false).Result;
+            }
+            else
+            {
+                Title = $"Creating new department";
             }
             Companies.AddRange(_repositoryManager.CompanyService.GetAll(false).Result);
             if (Company is not null)
