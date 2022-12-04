@@ -1,12 +1,6 @@
-﻿using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Persistance.Dtos
+namespace Service.Dtos
 {
     public class DepartmentDto
     {

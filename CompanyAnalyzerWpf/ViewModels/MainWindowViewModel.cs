@@ -2,15 +2,13 @@
 using CompanyAnalyzerWpf.Commands.GenericCommand;
 using CompanyAnalyzerWpf.Extensions;
 using CompanyAnalyzerWpf.Tools;
-using Domain.Models;
-using Persistance;
-using Persistance.Dtos;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
+using Service;
+using Service.Dtos;
 using System;
 using System.Collections.ObjectModel;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 

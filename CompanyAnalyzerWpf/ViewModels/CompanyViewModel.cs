@@ -1,17 +1,9 @@
 ﻿using CompanyAnalyzerWpf.Commands;
-using Contracts.cs.RepositoryContracts;
-using Domain.Models;
-using Persistance;
-using Persistance.Dtos;
-using Prism.Commands;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
+using Service;
+using Service.Dtos;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace CompanyAnalyzerWpf.ViewModels
 {

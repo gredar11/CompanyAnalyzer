@@ -1,13 +1,9 @@
 ﻿using CompanyAnalyzerWpf.Tools;
-using Domain.Models;
-using Persistance;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
+using Service;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
 
 namespace CompanyAnalyzerWpf.ViewModels
 {

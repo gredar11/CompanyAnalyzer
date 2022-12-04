@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
 using CompanyAnalyzerWpf.ViewModels;
 using CompanyAnalyzerWpf.Views;
-using Contracts.cs.RepositoryContracts;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
 using Persistance;
-using Persistance.Dtos;
-using Persistance.Repositories;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Unity;
+using Service.Dtos;
 using System.Configuration;
 using System.Windows;
 

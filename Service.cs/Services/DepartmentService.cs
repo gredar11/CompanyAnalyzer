@@ -1,13 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
-using Persistance.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Service.Dtos;
 
 namespace Persistance.Services
 {

@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
+using Persistance;
 using Persistance.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Persistance
+namespace Service
 {
     public class PersistanceServiceManager
     {

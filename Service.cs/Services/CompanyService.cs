@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Models;
-using Persistance.Dtos;
+using Service.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

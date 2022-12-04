@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Persistance\Persistance.csproj" />
+    <ProjectReference Include="..\Service.cs\Service.cs.csproj" />
   </ItemGroup>
 
 </Project>

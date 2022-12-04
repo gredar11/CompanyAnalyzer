@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistance.Dtos
+namespace Service.Dtos
 {
     public class MappingProfile : Profile
     {
