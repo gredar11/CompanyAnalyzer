@@ -1,15 +1,10 @@
-﻿using CompanyAnalyzerWpf.Commands;
-using CompanyAnalyzerWpf.Tools;
-using Domain.Models;
-using Persistance;
-using Persistance.Dtos;
+﻿using CompanyAnalyzerWpf.Tools;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
+using Service;
+using Service.Dtos;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace CompanyAnalyzerWpf.ViewModels
 {
