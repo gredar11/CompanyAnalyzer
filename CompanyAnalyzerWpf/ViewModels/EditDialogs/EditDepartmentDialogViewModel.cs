@@ -22,7 +22,11 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
         public string DepartmentName
         {
             get { return _departmentName; }
-            set { SetProperty(ref _departmentName, value); }
+            set
+            {
+                SetProperty(ref _departmentName, value);
+                CloseDialogCommand.RaiseCanExecuteChanged();
+            }
         }
         private CompanyDto _company;
         public CompanyDto Company
@@ -31,6 +35,7 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
             set
             {
                 SetProperty(ref _company, value);
+                CloseDialogCommand.RaiseCanExecuteChanged();
                 EmployeesOfDepartment.Clear();
                 if (value is not null && !newEntity)
                 {
@@ -83,7 +88,7 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
         }
         bool CanSaveChanges(string param)
         {
-            return !string.IsNullOrEmpty(DepartmentName) && Company is not null || param == "false"; 
+            return !string.IsNullOrEmpty(DepartmentName) && Company is not null || param == "false";
         }
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>

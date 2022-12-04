@@ -22,13 +22,21 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
         public string FirstName
         {
             get { return _firstName; }
-            set { SetProperty(ref _firstName, value); }
+            set
+            {
+                SetProperty(ref _firstName, value);
+                CloseDialogCommand.RaiseCanExecuteChanged();
+            }
         }
         private string _secondName;
         public string SecondName
         {
             get { return _secondName; }
-            set { SetProperty(ref _secondName, value); }
+            set
+            {
+                SetProperty(ref _secondName, value);
+                CloseDialogCommand.RaiseCanExecuteChanged();
+            }
         }
         private DateOnly dateOfBirth;
         public DateOnly DateOfBirth
@@ -46,7 +54,11 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
         public string Post
         {
             get { return _post; }
-            set { SetProperty(ref _post, value); }
+            set
+            {
+                SetProperty(ref _post, value);
+                CloseDialogCommand.RaiseCanExecuteChanged();
+            }
         }
         private double _salary;
         public double Salary
@@ -63,6 +75,7 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
             set
             {
                 SetProperty(ref _empDepartment, value);
+                CloseDialogCommand.RaiseCanExecuteChanged();
             }
         }
         private CompanyDto _company;
@@ -72,6 +85,8 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
             set
             {
                 SetProperty(ref _company, value);
+                CloseDialogCommand.RaiseCanExecuteChanged();
+
                 Departments.Clear();
                 if (Company is not null)
                     Departments.AddRange(_repositoryManager.DepartmentService.GetDepartments(Company.CompanyId, false).Result);

@@ -34,6 +34,7 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
             set
             {
                 SetProperty(ref _establishmentDate, value);
+                CloseDialogCommand.RaiseCanExecuteChanged();
             }
         }
         private string _adress;
@@ -43,6 +44,7 @@ namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
             set
             {
                 SetProperty(ref _adress, value);
+                CloseDialogCommand.RaiseCanExecuteChanged();
             }
         }
         private bool CanSaveEntity(string param)
