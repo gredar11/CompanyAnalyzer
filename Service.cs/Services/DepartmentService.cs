@@ -20,10 +20,10 @@ namespace Persistance.Services
             await _repositoryManager.SaveAsync();
         }
 
-        public async Task DeleteDepartment(Guid id)
+        public void DeleteDepartment(Guid id)
         {
             _repositoryManager.DepartmentRepository.DeleteDepartment(id);
-            await _repositoryManager.SaveAsync(); 
+            _repositoryManager.SaveChanges(); 
         }
 
         public async Task<DepartmentDto> GetDepartmentById(Guid companyId, Guid departmentId, bool trackChanges)

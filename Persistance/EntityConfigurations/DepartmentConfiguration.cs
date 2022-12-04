@@ -14,8 +14,8 @@ namespace Persistance.EntityConfigurations
         public void Configure(EntityTypeBuilder<Department> builder)
         {
             builder.HasKey(d => d.DepartmentId);
-            builder.HasMany(d => d.Employees).WithOne(e => e.Department).HasForeignKey(e => e.DepartmentId).OnDelete(DeleteBehavior.SetNull);
-            builder.HasOne(d => d.Head);
+            builder.HasMany(d => d.Employees).WithOne(e => e.Department).OnDelete(DeleteBehavior.SetNull).HasForeignKey(e => e.DepartmentId).OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(d => d.Head).WithOne().OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

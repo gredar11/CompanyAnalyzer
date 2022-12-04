@@ -11,8 +11,8 @@ using Persistance;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(CompanyEmployeesDbContext))]
-    [Migration("20221204173827_AddedSomeAttributes")]
-    partial class AddedSomeAttributes
+    [Migration("20221204184546_AddedBehaviourToHeadEmp")]
+    partial class AddedBehaviourToHeadEmp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,7 +62,8 @@ namespace Persistance.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("HeadEmployeeId");
+                    b.HasIndex("HeadEmployeeId")
+                        .IsUnique();
 
                     b.ToTable("Departments");
                 });
@@ -112,8 +113,9 @@ namespace Persistance.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Models.Employee", "Head")
-                        .WithMany()
-                        .HasForeignKey("HeadEmployeeId");
+                        .WithOne()
+                        .HasForeignKey("Domain.Models.Department", "HeadEmployeeId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Company");
 

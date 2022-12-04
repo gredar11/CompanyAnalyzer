@@ -25,10 +25,10 @@ namespace Persistance.Services
             await _repositoryManager.SaveAsync();
         }
 
-        public async Task DeleteCompany(Guid id)
+        public void DeleteCompany(Guid id)
         {
             _repositoryManager.CompanyRepository.DeleteCompany(id);
-            await _repositoryManager.SaveAsync();
+            _repositoryManager.SaveChanges();
         }
 
         public async Task<IEnumerable<CompanyDto>> GetAll(bool trackChanges)

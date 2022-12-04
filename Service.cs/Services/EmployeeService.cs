@@ -24,10 +24,10 @@ namespace Persistance.Services
             _repositoryManager.EmployeeRepository.CreateEmployee(entity);
             await _repositoryManager.SaveAsync();
         }
-        public async Task DeleteEmployee(Guid id)
+        public void DeleteEmployee(Guid id)
         {
             _repositoryManager.EmployeeRepository.DeleteEmployee(id);
-            await _repositoryManager.SaveAsync();
+            _repositoryManager.SaveChanges();
         }
 
         public async Task<IEnumerable<EmployeeDto>> GetAllEmployeesByCompany(Guid companyId, Guid departmentId, bool trackChanges)
