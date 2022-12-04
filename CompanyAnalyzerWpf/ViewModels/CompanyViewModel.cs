@@ -39,7 +39,7 @@ namespace CompanyAnalyzerWpf.ViewModels
 
         async Task ExecuteLoadDepartmentsCommand()
         {
-            var departments = await _repositoryManager.DepartmentService.GetDepartments(Company.CompanyId, false);
+            var departments = await Task.Run(() => _repositoryManager.DepartmentService.GetDepartments(Company.CompanyId, false));
             Departments.Clear();
             foreach (var item in departments)
             {

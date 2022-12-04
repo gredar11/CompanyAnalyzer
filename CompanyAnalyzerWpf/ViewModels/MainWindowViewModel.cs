@@ -1,4 +1,5 @@
 ﻿using CompanyAnalyzerWpf.Commands;
+using CompanyAnalyzerWpf.Commands.GenericCommand;
 using CompanyAnalyzerWpf.Extensions;
 using CompanyAnalyzerWpf.Tools;
 using Domain.Models;
@@ -9,6 +10,7 @@ using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -72,22 +74,27 @@ namespace CompanyAnalyzerWpf.ViewModels
         public ObservableCollection<CompanyViewModel> Companies { get; set; } = new ObservableCollection<CompanyViewModel>();
 
         #region DialogCommands
-        private DelegateCommand<object> _editCreateCommand;
-        public DelegateCommand<object> EditCreateDialogCommand =>
-            _editCreateCommand ?? (_editCreateCommand = new DelegateCommand<object>(ExecuteEditCreateDialogCommand));
+        private IAsyncCommand<object> _editCreateCommand;
+        public IAsyncCommand<object> EditCreateDialogCommand =>
+            _editCreateCommand ?? (_editCreateCommand = new AsyncCommand<object>(ExecuteEditCreateDialogCommand));
 
-        void ExecuteEditCreateDialogCommand(object parameter)
+        async Task ExecuteEditCreateDialogCommand(object parameter)
         {
             if (parameter is Type)
             {
                 var type = (Type)parameter;
                 object entityInstance = Activator.CreateInstance(type);
-                ShowDialogCreate(entityInstance);
+                await ShowDialogCreate(entityInstance);
                 return;
             }
-            ShowDialogWindowEdit();
+            await ShowDialogWindowEdit();
         }
-        private async void ShowDialogCreate(object itemToCreateOrEdit)
+        private async Task ShowDialogCreate(object itemToCreateOrEdit)
+        {
+            await OpenDialogAsync(itemToCreateOrEdit);
+        }
+
+        private async Task OpenDialogAsync(object itemToCreateOrEdit)
         {
             switch (itemToCreateOrEdit)
             {
@@ -126,7 +133,13 @@ namespace CompanyAnalyzerWpf.ViewModels
                     break;
             }
         }
-        private async void ShowDialogWindowEdit()
+
+        private async Task ShowDialogWindowEdit()
+        {
+            await OpernEditDialogAsync();
+        }
+
+        private async Task OpernEditDialogAsync()
         {
             switch (SelectedItem)
             {

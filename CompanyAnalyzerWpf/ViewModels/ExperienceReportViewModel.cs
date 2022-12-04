@@ -1,4 +1,5 @@
 ﻿using CompanyAnalyzerWpf.Tools;
+using Domain.Models;
 using Persistance;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CompanyAnalyzerWpf.ViewModels
 {
@@ -16,30 +18,7 @@ namespace CompanyAnalyzerWpf.ViewModels
 
         public ExperienceReportViewModel(PersistanceServiceManager repositoryManager)
         {
-            var allCompanyEntities = repositoryManager.CompanyService.GetAll(false).Result;
-            foreach (var company in allCompanyEntities)
-            {
-                CompanyNames.Add(company.CompanyName);
-                var departments = repositoryManager.DepartmentService.GetDepartments(company.CompanyId, false).Result;
-                foreach (var dep in departments)
-                {
-                    var employees = repositoryManager.EmployeeService.GetAllEmployeesByCompany(company.CompanyId, dep.DepartmentId, false).Result;
-                    foreach (var emp in employees)
-                    {
-                        AllEmployees.Add(new EmployeeExperience()
-                        {
-                            Age = DateTime.Now.Year - emp.DateOfBirth.Year,
-                            BirthAge = emp.DateOfBirth.Year,
-                            Experience = DateTime.Now.Year - emp.EmploymentDate.Year,
-                            CompanyName = company.CompanyName,
-                            EmployeeFullName = emp.FirstName + " " + emp.SecondName,
-                            DepartmentName = dep.DepartmentName
-                        });
-                        ExperienceYears.Add(DateTime.Now.Year - emp.EmploymentDate.Year);
-                    }
-                }
-            }
-            FilteredEmployees.AddRange(AllEmployees);
+            _repositoryManager = repositoryManager;
         }
         public ObservableCollection<EmployeeExperience> FilteredEmployees { get; set; } = new ObservableCollection<EmployeeExperience>();
         public ObservableCollection<EmployeeExperience> AllEmployees { get; set; } = new ObservableCollection<EmployeeExperience>();
@@ -119,12 +98,43 @@ namespace CompanyAnalyzerWpf.ViewModels
         {
         }
 
-        public void OnDialogOpened(IDialogParameters parameters)
+        public async void OnDialogOpened(IDialogParameters parameters)
         {
+            await Task.Run(() => LoadExperiencesAsync());
         }
 
+        private async Task LoadExperiencesAsync()
+        {
+            var allCompanyEntities = await _repositoryManager.CompanyService.GetAll(false);
+            foreach (var company in allCompanyEntities)
+            {
+                App.Current.Dispatcher.Invoke(() => CompanyNames.Add(company.CompanyName));
+                var departments = await _repositoryManager.DepartmentService.GetDepartments(company.CompanyId, false);
+                foreach (var dep in departments)
+                {
+                    var employees = await _repositoryManager.EmployeeService.GetAllEmployeesByCompany(company.CompanyId, dep.DepartmentId, false);
+                    foreach (var emp in employees)
+                    {
+                        App.Current.Dispatcher.Invoke(() =>
+                        {
 
+                            AllEmployees.Add(new EmployeeExperience()
+                            {
+                                Age = DateTime.Now.Year - emp.DateOfBirth.Year,
+                                BirthAge = emp.DateOfBirth.Year,
+                                Experience = DateTime.Now.Year - emp.EmploymentDate.Year,
+                                CompanyName = company.CompanyName,
+                                EmployeeFullName = emp.FirstName + " " + emp.SecondName,
+                                DepartmentName = dep.DepartmentName
+                            });
+                            ExperienceYears.Add(DateTime.Now.Year - emp.EmploymentDate.Year);
+                        });
 
+                    }
+                }
+            }
+            App.Current.Dispatcher.Invoke(() => FilteredEmployees.AddRange(AllEmployees));
+        }
     }
 }
 

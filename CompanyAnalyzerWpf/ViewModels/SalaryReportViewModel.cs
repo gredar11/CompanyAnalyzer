@@ -50,10 +50,10 @@ namespace CompanyAnalyzerWpf.ViewModels
                         var employees = await _repositoryManager.EmployeeService.GetAllEmployeesByCompany(company.CompanyId, department.DepartmentId, false);
                         foreach (var employee in employees)
                         {
-                            App.Current.Dispatcher.Invoke((Action)delegate
+                            App.Current.Dispatcher.Invoke(() =>
                             {
                                 models.Add(new EmployeeSalaryViewModel(employee, company.CompanyName, department.DepartmentName));
-                            }); 
+                            });
                         }
                     }
                 }
