@@ -18,9 +18,9 @@ namespace Persistance.Repositories
 
         public void CreateEmployee(Employee employee)
         {
-            RepositoryContext.Set<Employee>().Add(employee);
+            Create(employee);
         }
-        public async Task DeleteEmployee(Guid id)
+        public void DeleteEmployee(Guid id)
         {
             var entity = RepositoryContext.Set<Employee>().Find(id);
             Delete(entity);

@@ -18,16 +18,16 @@ namespace Persistance.Services
             _repositoryManager = repositoryManager;
             _mapper = mapper;
         }
-        public void CreateEmployee(EmployeeDto employee)
+        public async Task CreateEmployeeAsync(EmployeeDto employee)
         {
             var entity = _mapper.Map<Employee>(employee);
             _repositoryManager.EmployeeRepository.CreateEmployee(entity);
-            _repositoryManager.SaveAsync();
+            await _repositoryManager.SaveAsync();
         }
         public async Task DeleteEmployee(Guid id)
         {
-            var entity = _repositoryManager.EmployeeRepository.DeleteEmployee(id);
-            _repositoryManager.SaveAsync();
+            _repositoryManager.EmployeeRepository.DeleteEmployee(id);
+            await _repositoryManager.SaveAsync();
         }
 
         public async Task<IEnumerable<EmployeeDto>> GetAllEmployeesByCompany(Guid companyId, Guid departmentId, bool trackChanges)
@@ -43,12 +43,12 @@ namespace Persistance.Services
             return _mapper.Map<EmployeeDto>(entity);
         }
 
-        public void UpdateEmployee(EmployeeDto employee)
+        public async Task UpdateEmployee(EmployeeDto employee)
         {
             var entity = _repositoryManager.EmployeeRepository.GetEmployeeById(employee.EmployeeId, true).Result;
             _mapper.Map(employee, entity);
             //_repositoryManager.EmployeeRepository.UpdateEmployee(entity);
-            _repositoryManager.SaveAsync();
+            await _repositoryManager.SaveAsync();
         }
     }
 }

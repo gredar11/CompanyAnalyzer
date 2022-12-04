@@ -10,7 +10,9 @@ namespace Domain.Models
 {
     public class Department
     {
+        [Required]
         public Guid DepartmentId { get; set; }
+        [Required]
         public string DepartmentName { get; set; }
         [ForeignKey("Head")]
         public Guid? HeadEmployeeId { get; set; }

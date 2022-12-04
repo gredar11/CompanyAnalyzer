@@ -18,10 +18,10 @@ namespace Persistance.Repositories
 
         public void CreateDepartment(Department department)
         {
-            RepositoryContext.Set<Department>().Add(department);
+            Create(department);
         }
 
-        public async Task DeleteDepartment(Guid id)
+        public void DeleteDepartment(Guid id)
         {
             var entity = RepositoryContext.Set<Department>().Find(id);
             Delete(entity);
@@ -47,7 +47,7 @@ namespace Persistance.Repositories
 
         public void UpdateDepartment(Department department)
         {
-            RepositoryContext.Update(department);
+            Update(department);
         }
     }
 }

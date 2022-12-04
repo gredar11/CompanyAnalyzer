@@ -7,7 +7,7 @@ using Service.Dtos;
 using System;
 using System.Collections.ObjectModel;
 
-namespace CompanyAnalyzerWpf.ViewModels
+namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
 {
     public class EditEmployeeDialogViewModel : BindableBase, IDialogAware
     {
@@ -86,19 +86,24 @@ namespace CompanyAnalyzerWpf.ViewModels
 
             if (parameter?.ToLower() == "true")
             {
-                Employee.FirstName = FirstName;
-                Employee.SecondName = SecondName;
-                Employee.Salary = Salary;
-                Employee.Post = Post;
-                Employee.DateOfBirth = DateOfBirth;
-                Employee.EmploymentDate = EmploymentDate;
-                Employee.DepartmentId = EmpDepartment.DepartmentId;
+                SetChanges();
                 result = ButtonResult.OK;
             }
             else if (parameter?.ToLower() == "false")
                 result = ButtonResult.Cancel;
 
             RaiseRequestClose(new DialogResult(result));
+        }
+
+        private void SetChanges()
+        {
+            Employee.FirstName = FirstName;
+            Employee.SecondName = SecondName;
+            Employee.Salary = Salary;
+            Employee.Post = Post;
+            Employee.DateOfBirth = DateOfBirth;
+            Employee.EmploymentDate = EmploymentDate;
+            Employee.DepartmentId = EmpDepartment.DepartmentId;
         }
 
         public virtual void RaiseRequestClose(IDialogResult dialogResult)
@@ -114,14 +119,20 @@ namespace CompanyAnalyzerWpf.ViewModels
         {
 
         }
+        bool CanSaveChanges(string param)
+        {
+            return !string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(SecondName)
+                && !string.IsNullOrEmpty(Post) && !string.IsNullOrEmpty(FirstName) && Company is not null
+                && EmpDepartment is not null || param == "false";
+        }
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
-            _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
+            _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog, CanSaveChanges));
 
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
-            var requestObject = (parameters as DialogParametersWithObj);
+            var requestObject = parameters as DialogParametersWithObj;
             Employee = (EmployeeDto)requestObject.RequestParameter;
             FirstName = Employee.FirstName;
             SecondName = Employee.SecondName;
@@ -135,7 +146,7 @@ namespace CompanyAnalyzerWpf.ViewModels
                 Company = _repositoryManager.CompanyService.GetCompany(EmpDepartment.CompanyId.Value, false).Result;
             }
             Companies.AddRange(_repositoryManager.CompanyService.GetAll(false).Result);
-            
+
         }
     }
 }

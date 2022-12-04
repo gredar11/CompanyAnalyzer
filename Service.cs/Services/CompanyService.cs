@@ -18,16 +18,16 @@ namespace Persistance.Services
             _repositoryManager = repositoryManager;
             _mapper = mapper;
         }
-        public void CreateCompany(CompanyDto company)
+        public async Task CreateCompanyAsync(CompanyDto company)
         {
             var entity = _mapper.Map<Company>(company);  
             _repositoryManager.CompanyRepository.CreateCompany(entity);
-            _repositoryManager.SaveAsync();
+            await _repositoryManager.SaveAsync();
         }
 
         public async Task DeleteCompany(Guid id)
         {
-            await _repositoryManager.CompanyRepository.DeleteCompany(id);
+            _repositoryManager.CompanyRepository.DeleteCompany(id);
             await _repositoryManager.SaveAsync();
         }
 
@@ -43,12 +43,12 @@ namespace Persistance.Services
             return _mapper.Map<CompanyDto>(company);
         }
 
-        public void UpdateCompany(CompanyDto company)
+        public async Task UpdateCompany(CompanyDto company)
         {
             var entity = _repositoryManager.CompanyRepository.GetCompany(company.CompanyId, true).Result;
             _mapper.Map(company, entity);
             //_repositoryManager.CompanyRepository.UpdateCompany(entity);
-            _repositoryManager.SaveAsync();
+            await _repositoryManager.SaveAsync();
         }
     }
 }

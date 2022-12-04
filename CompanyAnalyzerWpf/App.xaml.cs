@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CompanyAnalyzerWpf.ViewModels;
+using CompanyAnalyzerWpf.ViewModels.EditDialogs;
+using CompanyAnalyzerWpf.ViewModels.ReportDialogs;
 using CompanyAnalyzerWpf.Views;
 using Domain.Models;
 using Persistance;

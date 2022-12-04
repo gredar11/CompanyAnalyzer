@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows;
 using Domain.Models;
-using CompanyAnalyzerWpf.ViewModels;
+using CompanyAnalyzerWpf.ViewModels.ReportDialogs;
 
 namespace CompanyAnalyzerWpf.Tools
 {

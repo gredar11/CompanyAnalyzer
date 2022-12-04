@@ -13,6 +13,6 @@ namespace Contracts.cs.RepositoryContracts
         void UpdateCompany(Company company);
         Task<IEnumerable<Company>> GetAll(bool trackChanges);
         Task<Company> GetCompany(Guid id, bool trackChanges);
-        Task DeleteCompany(Guid id);
+        void DeleteCompany(Guid id);
     }
 }

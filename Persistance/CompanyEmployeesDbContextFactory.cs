@@ -13,7 +13,7 @@ namespace Persistance
         public CompanyEmployeesDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<CompanyEmployeesDbContext>();
-            optionsBuilder.UseSqlite(args[0]);
+            optionsBuilder.UseSqlite(args.Length != 0 ? args[0] : Path.Combine(Environment.CurrentDirectory, "CompanyAnalitics.db"));
             return new CompanyEmployeesDbContext(optionsBuilder.Options);
         }
     }

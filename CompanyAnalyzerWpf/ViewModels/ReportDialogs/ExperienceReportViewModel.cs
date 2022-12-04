@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CompanyAnalyzerWpf.ViewModels
+namespace CompanyAnalyzerWpf.ViewModels.ReportDialogs
 {
     public class ExperienceReportViewModel : BindableBase, IDialogAware
     {
@@ -105,14 +105,14 @@ namespace CompanyAnalyzerWpf.ViewModels
             var allCompanyEntities = await _repositoryManager.CompanyService.GetAll(false);
             foreach (var company in allCompanyEntities)
             {
-                App.Current.Dispatcher.Invoke(() => CompanyNames.Add(company.CompanyName));
+                System.Windows.Application.Current.Dispatcher.Invoke(() => CompanyNames.Add(company.CompanyName));
                 var departments = await _repositoryManager.DepartmentService.GetDepartments(company.CompanyId, false);
                 foreach (var dep in departments)
                 {
                     var employees = await _repositoryManager.EmployeeService.GetAllEmployeesByCompany(company.CompanyId, dep.DepartmentId, false);
                     foreach (var emp in employees)
                     {
-                        App.Current.Dispatcher.Invoke(() =>
+                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
                         {
 
                             AllEmployees.Add(new EmployeeExperience()
@@ -130,7 +130,7 @@ namespace CompanyAnalyzerWpf.ViewModels
                     }
                 }
             }
-            App.Current.Dispatcher.Invoke(() => FilteredEmployees.AddRange(AllEmployees));
+            System.Windows.Application.Current.Dispatcher.Invoke(() => FilteredEmployees.AddRange(AllEmployees));
         }
     }
 }

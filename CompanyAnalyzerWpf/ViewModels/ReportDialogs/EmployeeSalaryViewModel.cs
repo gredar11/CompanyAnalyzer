@@ -1,9 +1,9 @@
 ﻿using Prism.Mvvm;
 using Service.Dtos;
 
-namespace CompanyAnalyzerWpf.ViewModels
+namespace CompanyAnalyzerWpf.ViewModels.ReportDialogs
 {
-    public class EmployeeSalaryViewModel:BindableBase
+    public class EmployeeSalaryViewModel : BindableBase
     {
         public EmployeeSalaryViewModel(EmployeeDto employee, string companyName, string departmentName)
         {

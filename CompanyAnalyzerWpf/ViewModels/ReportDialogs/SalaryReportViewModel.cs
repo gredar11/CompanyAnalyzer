@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace CompanyAnalyzerWpf.ViewModels
+namespace CompanyAnalyzerWpf.ViewModels.ReportDialogs
 {
     public class SalaryReportViewModel : BindableBase, IDialogAware
     {
@@ -46,7 +46,7 @@ namespace CompanyAnalyzerWpf.ViewModels
                         var employees = await _repositoryManager.EmployeeService.GetAllEmployeesByCompany(company.CompanyId, department.DepartmentId, false);
                         foreach (var employee in employees)
                         {
-                            App.Current.Dispatcher.Invoke(() =>
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
                                 models.Add(new EmployeeSalaryViewModel(employee, company.CompanyName, department.DepartmentName));
                             });

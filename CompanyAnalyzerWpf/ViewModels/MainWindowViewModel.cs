@@ -11,6 +11,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace CompanyAnalyzerWpf.ViewModels
 {
@@ -72,27 +73,27 @@ namespace CompanyAnalyzerWpf.ViewModels
         public ObservableCollection<CompanyViewModel> Companies { get; set; } = new ObservableCollection<CompanyViewModel>();
 
         #region DialogCommands
-        private IAsyncCommand<object> _editCreateCommand;
-        public IAsyncCommand<object> EditCreateDialogCommand =>
-            _editCreateCommand ?? (_editCreateCommand = new AsyncCommand<object>(ExecuteEditCreateDialogCommand));
+        private DelegateCommand<object> _editCreateCommand;
+        public DelegateCommand<object> EditCreateDialogCommand =>
+            _editCreateCommand ?? (_editCreateCommand = new DelegateCommand<object>(ExecuteEditCreateDialogCommand));
 
-        async Task ExecuteEditCreateDialogCommand(object parameter)
+        void ExecuteEditCreateDialogCommand(object parameter)
         {
             if (parameter is Type)
             {
                 var type = (Type)parameter;
                 object entityInstance = Activator.CreateInstance(type);
-                await ShowDialogCreate(entityInstance);
+                ShowDialogCreate(entityInstance);
                 return;
             }
-            await ShowDialogWindowEdit();
+            ShowDialogWindowEdit();
         }
-        private async Task ShowDialogCreate(object itemToCreateOrEdit)
+        private void ShowDialogCreate(object itemToCreateOrEdit)
         {
-            await OpenDialogAsync(itemToCreateOrEdit);
+            OpenDialogAsync(itemToCreateOrEdit);
         }
 
-        private async Task OpenDialogAsync(object itemToCreateOrEdit)
+        private async void OpenDialogAsync(object itemToCreateOrEdit)
         {
             switch (itemToCreateOrEdit)
             {
@@ -102,7 +103,7 @@ namespace CompanyAnalyzerWpf.ViewModels
                         // обновить коллекции
                         if (r.Result == ButtonResult.OK)
                         {
-                            _repositoryManager.CompanyService.CreateCompany(company);
+                            await _repositoryManager.CompanyService.CreateCompanyAsync(company);
                             await ExecuteLoadCompaniesAsync();
                         }
                     });
@@ -113,7 +114,7 @@ namespace CompanyAnalyzerWpf.ViewModels
                         // обновить коллекции
                         if (r.Result == ButtonResult.OK)
                         {
-                            _repositoryManager.DepartmentService.CreateDepartment(department);
+                            await _repositoryManager.DepartmentService.CreateDepartmentAsync(department);
                             await ExecuteLoadCompaniesAsync();
 
                         }
@@ -124,7 +125,7 @@ namespace CompanyAnalyzerWpf.ViewModels
                     {
                         if (r.Result == ButtonResult.OK)
                         {
-                            _repositoryManager.EmployeeService.CreateEmployee(employee);
+                            await _repositoryManager.EmployeeService.CreateEmployeeAsync(employee);
                             await ExecuteLoadCompaniesAsync();
                         }
                     });
@@ -132,12 +133,12 @@ namespace CompanyAnalyzerWpf.ViewModels
             }
         }
 
-        private async Task ShowDialogWindowEdit()
+        private void ShowDialogWindowEdit()
         {
-            await OpernEditDialogAsync();
+            OpernEditDialogAsync();
         }
 
-        private async Task OpernEditDialogAsync()
+        private async void OpernEditDialogAsync()
         {
             switch (SelectedItem)
             {
@@ -147,7 +148,7 @@ namespace CompanyAnalyzerWpf.ViewModels
                         // обновить коллекции
                         if (r.Result == ButtonResult.OK)
                         {
-                            _repositoryManager.CompanyService.UpdateCompany(companyViewModel.Company);
+                            await _repositoryManager.CompanyService.UpdateCompany(companyViewModel.Company);
                             await ExecuteLoadCompaniesAsync();
                         }
                     });
@@ -157,7 +158,7 @@ namespace CompanyAnalyzerWpf.ViewModels
                     {
                         if (r.Result == ButtonResult.OK)
                         {
-                            _repositoryManager.DepartmentService.UpdateDepartment(departmentViewModel.Department);
+                            await _repositoryManager.DepartmentService.UpdateDepartmentAsync(departmentViewModel.Department);
                             await ExecuteLoadCompaniesAsync();
                         }
                     });
@@ -167,7 +168,7 @@ namespace CompanyAnalyzerWpf.ViewModels
                     {
                         if (r.Result == ButtonResult.OK)
                         {
-                            _repositoryManager.EmployeeService.UpdateEmployee(employeeViewModel.Employee);
+                            await _repositoryManager.EmployeeService.UpdateEmployee(employeeViewModel.Employee);
                             await ExecuteLoadCompaniesAsync();
                         }
                     });

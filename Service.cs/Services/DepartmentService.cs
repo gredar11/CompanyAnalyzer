@@ -13,16 +13,16 @@ namespace Persistance.Services
             _repositoryManager = repositoryManager;
             _mapper = mapper;
         }
-        public void CreateDepartment(DepartmentDto departmentDto)
+        public async Task CreateDepartmentAsync(DepartmentDto departmentDto)
         {
             var entity = _mapper.Map<Department>(departmentDto);
             _repositoryManager.DepartmentRepository.CreateDepartment(entity);
-            _repositoryManager.SaveAsync();
+            await _repositoryManager.SaveAsync();
         }
 
         public async Task DeleteDepartment(Guid id)
         {
-            await _repositoryManager.DepartmentRepository.DeleteDepartment(id);
+            _repositoryManager.DepartmentRepository.DeleteDepartment(id);
             await _repositoryManager.SaveAsync(); 
         }
 
@@ -45,12 +45,12 @@ namespace Persistance.Services
             return _mapper.Map<IEnumerable<DepartmentDto>>(result);
         }
 
-        public void UpdateDepartment(DepartmentDto department)
+        public async Task UpdateDepartmentAsync(DepartmentDto department)
         {
             var entity = _repositoryManager.DepartmentRepository.GetDepartmentById(department.CompanyId.Value, department.DepartmentId, true).Result;
             _mapper.Map(department, entity);
             //_repositoryManager.DepartmentRepository.UpdateDepartment(entity);
-            _repositoryManager.SaveAsync();
+            await _repositoryManager.SaveAsync();
         }
     }
 }

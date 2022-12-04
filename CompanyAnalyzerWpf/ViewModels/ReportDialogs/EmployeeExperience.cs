@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CompanyAnalyzerWpf.ViewModels
+namespace CompanyAnalyzerWpf.ViewModels.ReportDialogs
 {
     public class EmployeeExperience
     {

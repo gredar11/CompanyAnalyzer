@@ -7,7 +7,7 @@ using Service.Dtos;
 using System;
 using System.Collections.ObjectModel;
 
-namespace CompanyAnalyzerWpf.ViewModels
+namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
 {
     public class EditDepartmentDialogViewModel : BindableBase, IDialogAware
     {
@@ -81,13 +81,17 @@ namespace CompanyAnalyzerWpf.ViewModels
         {
 
         }
+        bool CanSaveChanges(string param)
+        {
+            return !string.IsNullOrEmpty(DepartmentName) && Company is not null || param == "false"; 
+        }
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
-            _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
+            _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog, CanSaveChanges));
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
-            var requestObject = (parameters as DialogParametersWithObj);
+            var requestObject = parameters as DialogParametersWithObj;
             Department = (DepartmentDto)requestObject.RequestParameter;
             DepartmentName = Department.DepartmentName;
             if (!requestObject.CreateNew)

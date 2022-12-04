@@ -6,10 +6,11 @@ using Service;
 using Service.Dtos;
 using System;
 
-namespace CompanyAnalyzerWpf.ViewModels
+namespace CompanyAnalyzerWpf.ViewModels.EditDialogs
 {
     public class EditCompanyDialogViewModel : BindableBase, IDialogAware
     {
+
         private readonly PersistanceServiceManager _repositoryManager;
         private bool newEntity = false;
         public EditCompanyDialogViewModel(PersistanceServiceManager repositoryManager)
@@ -44,9 +45,13 @@ namespace CompanyAnalyzerWpf.ViewModels
                 SetProperty(ref _adress, value);
             }
         }
+        private bool CanSaveEntity(string param)
+        {
+            return !string.IsNullOrEmpty(Adress) && !string.IsNullOrEmpty(CompanyName) || param == "false";
+        }
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
-            _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
+            _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog, CanSaveEntity));
         public string Title => "Edit company";
 
         public event Action<IDialogResult> RequestClose;
@@ -59,7 +64,7 @@ namespace CompanyAnalyzerWpf.ViewModels
                 CompanyModel.EstablishmentDate = EstablishmentDate;
                 CompanyModel.CompanyName = CompanyName;
                 CompanyModel.Adress = Adress;
-               
+
                 result = ButtonResult.OK;
             }
             else if (parameter?.ToLower() == "false")

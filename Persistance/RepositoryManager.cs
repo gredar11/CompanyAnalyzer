@@ -32,5 +32,9 @@ namespace Persistance
         {
             await _repositoryConext.SaveChangesAsync();
         }
+        public void SaveChanges()
+        {
+            _repositoryConext.SaveChanges();
+        }
     }
 }
