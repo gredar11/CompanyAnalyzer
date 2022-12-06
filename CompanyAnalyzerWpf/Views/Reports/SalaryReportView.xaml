@@ -40,9 +40,10 @@
                                     <ControlTemplate TargetType="{x:Type GroupItem}">
                                         <Expander IsExpanded="True" Background="#FF112255" BorderBrush="#FF002255" Foreground="#FFEEEEEE" BorderThickness="1,1,1,5">
                                             <Expander.Header>
-                                                <DockPanel>
+                                                <DockPanel HorizontalAlignment="{Binding HorizontalAlignment, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentPresenter}}, Mode=OneWayToSource}">
                                                     <TextBlock FontWeight="Bold" Text="{Binding Path=Name , StringFormat={}Company name: {0}}" />
-                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=Items,Converter={StaticResource TotalSalaryConverter}, StringFormat={}Total: {0}}" Foreground="Coral" Margin="30 0 0 0"></TextBlock>
+                                                    <TextBlock DockPanel.Dock="Right" TextAlignment="Right" FontWeight="Bold" Text="{Binding Path=Items,Converter={StaticResource TotalSalaryConverter}, StringFormat={}Total: {0}}"
+                                                               Foreground="Coral" ></TextBlock>
                                                 </DockPanel>
                                             </Expander.Header>
                                             <Expander.Content>
@@ -64,10 +65,11 @@
                                     <ControlTemplate TargetType="{x:Type GroupItem}">
                                         <Expander IsExpanded="True" Background="CadetBlue" BorderBrush="#FF002255" Foreground="#FFEEEEEE" BorderThickness="1,1,1,5">
                                             <Expander.Header>
-                                                <DockPanel>
+                                                <DockPanel HorizontalAlignment="{Binding HorizontalAlignment, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentPresenter}}, Mode=OneWayToSource}">
                                                     <TextBlock FontWeight="Bold" Text="{Binding Path=Name , StringFormat={}Department name: {0}}" />
                                                     <TextBlock Margin="20 0 0 0" Text="{Binding Path=ItemCount, StringFormat={}Employees count: {0}}"/>
-                                                    <TextBlock FontWeight="Bold" Margin="30 0 0 0" Text="{Binding Path=Items,Converter={StaticResource TotalSalaryConverter}, StringFormat={}Total: {0}}" Foreground="DarkRed" ></TextBlock>
+                                                    <TextBlock FontWeight="Bold" Margin="30 0 0 0" Text="{Binding Path=Items,Converter={StaticResource TotalSalaryConverter}, StringFormat={}Total: {0}}" Foreground="DarkRed" 
+                                                               TextAlignment="Right"></TextBlock>
                                                 </DockPanel>
                                             </Expander.Header>
                                             <Expander.Content>
